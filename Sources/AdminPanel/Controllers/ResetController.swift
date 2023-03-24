@@ -4,7 +4,7 @@ import Submissions
 import Sugar
 import Vapor
 
-final class ResetController<U: AdminPanelUserType>: Reset.ResetController<U> {
+final class ResetController {
 
     override func resetPasswordRequest(_ req: Request) throws -> Future<Response> {
         let adminPanelConfig: AdminPanelConfig<U> = try req.make()

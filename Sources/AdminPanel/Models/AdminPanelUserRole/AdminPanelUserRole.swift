@@ -1,4 +1,4 @@
-import MySQL
+import Fluent
 import Vapor
 
 public enum AdminPanelUserRole: String {
@@ -23,12 +23,6 @@ public enum AdminPanelUserRole: String {
         case AdminPanelUserRole.user.rawValue: self = .user
         default: return nil
         }
-    }
-}
-
-extension AdminPanelUserRole: ReflectionDecodable {
-    public static func reflectDecoded() throws -> (AdminPanelUserRole, AdminPanelUserRole) {
-        return (.superAdmin, .admin)
     }
 }
 
@@ -62,22 +56,6 @@ extension AdminPanelUserRole: AdminPanelUserRoleType {
 
     public static func == (lhs: AdminPanelUserRole, rhs: AdminPanelUserRole) -> Bool {
         return lhs.weight == rhs.weight
-    }
-}
-
-extension AdminPanelUserRole: MySQLDataConvertible {
-    public func convertToMySQLData() -> MySQLData {
-        return MySQLData(string: self.rawValue)
-    }
-
-    public static func convertFromMySQLData(_ mysqlData: MySQLData) throws -> AdminPanelUserRole {
-        guard let role = AdminPanelUserRole(rawValue: mysqlData.string()) else {
-            throw Abort(
-                .internalServerError,
-                reason: "Could not convert MySQLData to AdminPanelUserRole"
-            )
-        }
-        return role
     }
 }
 

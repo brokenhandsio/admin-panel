@@ -10,7 +10,7 @@ public protocol LoginControllerType {
     func logout(_ req: Request) throws -> Response
 }
 
-public final class LoginController<U: AdminPanelUserType>: LoginControllerType {
+public final class LoginController: LoginControllerType {
 
     public init() {}
 

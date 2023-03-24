@@ -3,7 +3,7 @@ import Flash
 import Vapor
 
 /// Basic middleware to redirect users that needs to reset their password to the supplied path
-public struct ShouldResetPasswordMiddleware<U>: Middleware where U: AdminPanelUserType {
+public struct ShouldResetPasswordMiddleware: Middleware {
 
     /// The path to redirect to
     let path: String

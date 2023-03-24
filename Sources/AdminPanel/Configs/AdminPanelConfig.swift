@@ -4,7 +4,7 @@ import Reset
 import Sugar
 import Vapor
 
-public struct AdminPanelConfig<U: AdminPanelUserType>: Service {
+public struct AdminPanelConfig {
     public struct ResetPasswordEmail {
         public let fromEmail: String
         public let subject: String

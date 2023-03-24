@@ -5,7 +5,7 @@ public protocol DashboardControllerType {
     func renderDashboard(_ req: Request) throws -> Future<Response>
 }
 
-public final class DashboardController<U: AdminPanelUserType>: DashboardControllerType {
+public final class DashboardController: DashboardControllerType {
     public init() {}
 
     public func renderDashboard(_ req: Request) throws -> Future<Response> {

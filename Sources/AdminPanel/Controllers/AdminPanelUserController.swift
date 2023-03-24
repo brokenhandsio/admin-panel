@@ -15,15 +15,13 @@ public protocol AdminPanelUserControllerType {
     func delete(_ req: Request) throws -> Future<Response>
 }
 
-public final class AdminPanelUserController
-    <U: AdminPanelUserType>: AdminPanelUserControllerType
-{
+public final class AdminPanelUserController: AdminPanelUserControllerType {
     public init() {}
 
     // MARK: List
 
     public func renderList(_ req: Request) throws -> Future<Response> {
-        let config: AdminPanelConfig<U> = try req.make()
+        let config: AdminPanelConfig = req.adminPanelConfig
         return U.query(on: req)
             .paginate(on: req)
             .flatMap(to: Response.self) { (paginator: OffsetPaginator) in
@@ -42,7 +40,7 @@ public final class AdminPanelUserController
     // MARK: Create user
 
     public func renderCreate(_ req: Request) throws -> Future<Response> {
-        let config: AdminPanelConfig<U> = try req.make()
+        let config: AdminPanelConfig = req.adminPanelConfig
         try req.addFields(forType: U.self)
 
         return try req
@@ -158,15 +156,5 @@ public final class AdminPanelUserController
                         "got deleted successfully."
                     )
             }
-    }
-}
-
-private extension AdminPanelUserController {
-    private struct SingleUser: Encodable {
-        let user: U?
-    }
-
-    private struct MultipleUsers: Encodable {
-        let users: [U]
     }
 }

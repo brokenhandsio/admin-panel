@@ -3,12 +3,12 @@ import Leaf
 import Sugar
 import TemplateKit
 
-public final class AdminPanelConfigTag<U: AdminPanelUserType>: TagRenderer {
+public final class AdminPanelConfigTag: TagRenderer {
     public func render(tag: TagContext) throws -> Future<TemplateData> {
         try tag.requireParameterCount(1)
         let request = try tag.requireRequest()
-        let config = try request.privateContainer.make(AdminPanelConfigTagData<U>.self)
-        let container = try request.privateContainer.make(CurrentUserContainer<U>.self)
+        let config = try request.privateContainer.make(AdminPanelConfigTagData.self)
+        let container = try request.privateContainer.make(CurrentUserContainer.self)
 
         return try tag.future(
             config.viewData(
@@ -22,7 +22,7 @@ public final class AdminPanelConfigTag<U: AdminPanelUserType>: TagRenderer {
     public init() {}
 }
 
-public final class AdminPanelConfigTagData<U: AdminPanelUserType>: Service {
+public final class AdminPanelConfigTagData {
     enum Keys: String {
         case name
         case baseURL
@@ -51,7 +51,7 @@ public final class AdminPanelConfigTagData<U: AdminPanelUserType>: Service {
         self.environment = environment
     }
 
-    func viewData(for data: TemplateData, user: U?, tag: TagContext) throws -> TemplateData {
+    func viewData(for data: TemplateData, user: AdminPanelUser?, tag: TagContext) throws -> TemplateData {
         guard let key = data.string else {
             throw tag.error(reason: "Wrong type given (expected a string): \(type(of: data))")
         }
@@ -74,5 +74,16 @@ public final class AdminPanelConfigTagData<U: AdminPanelUserType>: Service {
         case .environment:
             return .string(environment.name)
         }
+    }
+}
+
+extension Request {
+    var adminPanelConfigTagData: AdminPanelConfigTagData {
+        return .init(
+            name: self.adminPanelConfig.name,
+            baseURL: self.adminPanelConfig.baseURL,
+            sidebarMenuPathGenerator: self.adminPanelConfig.sidebarMenuPathGenerator,
+            environment: self.adminPanelConfig.environment
+        )
     }
 }
