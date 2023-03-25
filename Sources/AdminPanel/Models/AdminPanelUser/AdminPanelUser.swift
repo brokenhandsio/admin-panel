@@ -2,6 +2,8 @@ import Fluent
 import Vapor
 
 public final class AdminPanelUser: Model {
+    public static var schema: String = "admin_panel_user"
+    
     @ID(custom: .id)
     public var id: Int?
 
@@ -14,7 +16,7 @@ public final class AdminPanelUser: Model {
     @Field(key: "title")
     public var title: String?
 
-    @Field(key: "avatarUrl")
+    @Field(key: "avatar_url")
     public var avatarURL: String?
 
     @Field(key: "role")
@@ -23,19 +25,19 @@ public final class AdminPanelUser: Model {
     @Field(key: "password")
     public var password: String
 
-    @Field(key: "passwordChangeCount")
+    @Field(key: "password_change_count")
     public var passwordChangeCount: Int
 
-    @Field(key: "shouldResetPassword")
+    @Field(key: "should_reset_password")
     public var shouldResetPassword: Bool
 
-    @Timestamp(key: "createdAt", on: .create)
+    @Timestamp(key: "created_at", on: .create)
     public var createdAt: Date?
 
-    @Timestamp(key: "deletedAt", on: .delete)
+    @Timestamp(key: "deleted_at", on: .delete)
     public var deletedAt: Date?
 
-    @Timestamp(key: "updatedAt", on: .update)
+    @Timestamp(key: "updated_at", on: .update)
     public var updatedAt: Date?
 
     public init() { }

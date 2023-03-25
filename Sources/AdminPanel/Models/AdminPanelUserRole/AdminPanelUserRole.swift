@@ -60,3 +60,4 @@ extension AdminPanelUserRole: AdminPanelUserRoleType {
 }
 
 extension AdminPanelUserRole: CaseIterable {}
+extension AdminPanelUserRole: Content {}

@@ -1,13 +1,9 @@
-import Authentication
 import Bootstrap
 import Flash
 import Fluent
 import JWT
 import Leaf
-import Paginator
-import Reset
 import Submissions
-import Sugar
 import Vapor
 
 public struct AdminPanelProvider {
@@ -26,17 +22,14 @@ public struct AdminPanelProvider {
         app.leaf.tags["flashes"] = FlashTag()
         
         // MARK: Commands
-        app.commands.use(AdminPanelUserSeedCommand(), as: "adminpanel:user-seeder")
+//        app.commands.use(AdminPanelUserSeedCommand(), as: "adminpanel:user-seeder")
         
         // MARK: Middleware
         app.middleware.use(FlashMiddleware())
         app.middleware.use(RedirectMiddleware())
         app.middleware.use(ShouldResetPasswordMiddleware())
-    }
-
-    /// See Service.Provider.boot
-    public func didBoot(_ container: Container) throws -> Future<Void> {
-        return .done(on: container)
+        app.middleware.use(app.sessions.middleware)
+        app.middleware.use(AdminPanelUser.asyncSessionAuthenticator())
     }
 }
 
@@ -73,23 +66,23 @@ public struct AdminPanelProvider {
 //    }
 //}
 
-public extension LeafTagConfig {
-    mutating func useAdminPanelLeafTags<U: AdminPanelUserType>(
-        _ type: U.Type,
-        paths: TagTemplatePaths = .init()
-    ) {
-        useBootstrapLeafTags()
-        use([
-            "adminPanel:avatarURL": AvatarURLTag(),
-            "adminPanel:config": AdminPanelConfigTag<U>(),
-            "adminPanel:sidebar:heading": SidebarHeadingTag(),
-            "adminPanel:sidebar:menuItem": SidebarMenuItemTag(),
-            "adminPanel:user": CurrentUserTag<U>(),
-            "adminPanel:user:requireRole": RequireRoleTag<U>(),
-            "adminPanel:user:hasRequiredRole": HasRequiredRole<U>(),
-            "number": NumberFormatTag(),
-            "offsetPaginator": OffsetPaginatorTag(templatePath: "Paginator/offsetpaginator"),
-            "submissions:WYSIWYG": InputTag(templatePath: paths.wysiwygField)
-        ])
-    }
-}
+//public extension LeafTagConfig {
+//    mutating func useAdminPanelLeafTags<U: AdminPanelUserType>(
+//        _ type: U.Type,
+//        paths: TagTemplatePaths = .init()
+//    ) {
+//        useBootstrapLeafTags()
+//        use([
+//            "adminPanel:avatarURL": AvatarURLTag(),
+//            "adminPanel:config": AdminPanelConfigTag<U>(),
+//            "adminPanel:sidebar:heading": SidebarHeadingTag(),
+//            "adminPanel:sidebar:menuItem": SidebarMenuItemTag(),
+//            "adminPanel:user": CurrentUserTag<U>(),
+//            "adminPanel:user:requireRole": RequireRoleTag<U>(),
+//            "adminPanel:user:hasRequiredRole": HasRequiredRole<U>(),
+//            "number": NumberFormatTag(),
+//            "offsetPaginator": OffsetPaginatorTag(templatePath: "Paginator/offsetpaginator"),
+//            "submissions:WYSIWYG": InputTag(templatePath: paths.wysiwygField)
+//        ])
+//    }
+//}

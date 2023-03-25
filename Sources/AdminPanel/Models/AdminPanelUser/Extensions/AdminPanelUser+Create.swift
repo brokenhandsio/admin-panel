@@ -1,10 +1,7 @@
-import Sugar
+import Vapor
 
-extension AdminPanelUser: Creatable {
-    public struct Create: Decodable, HasReadablePassword, HasReadableUsername {
-        public static let readablePasswordKey = \Create.password
-        public static var readableUsernameKey = \Create.email
-
+extension AdminPanelUser {
+    public struct Create: Content {
         let email: String
         let name: String
         let title: String?
@@ -27,8 +24,25 @@ extension AdminPanelUser: Creatable {
             name: create.name,
             title: create.title,
             role: AdminPanelUserRole(rawValue: create.role),
-            password: AdminPanelUser.hashPassword(password),
+            password: Bcrypt.hash(password),
             shouldResetPassword: create.shouldResetPassword ?? false
         )
     }
+}
+
+extension String {
+    static func randomAlphaNumericString(_ length: Int) -> String {
+        let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
+        let allowedCharsCount = UInt32(allowedChars.count)
+        var randomString = ""
+
+        for _ in 0..<length {
+            let randomNum = Int(arc4random_uniform(allowedCharsCount))
+            let newCharacter = allowedChars[allowedChars.index(allowedChars.startIndex, offsetBy: randomNum)]
+            randomString += String(newCharacter)
+        }
+
+        return randomString
+    }
+
 }
