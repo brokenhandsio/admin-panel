@@ -1,7 +1,5 @@
 import Leaf
-import Reset
 import Submissions
-import Sugar
 import Vapor
 
 final class ResetController {

@@ -1,7 +1,4 @@
-import Authentication
 import Flash
-import Routing
-import Sugar
 import Vapor
 
 public struct AdminPanelEndpoints {
@@ -42,76 +39,15 @@ public struct AdminPanelEndpoints {
     }
 }
 
-public struct AdminPanelMiddlewares: Service {
-    public let secure: [Middleware]
-    public let unsecure: [Middleware]
-}
-
-public extension Router {
-    func useAdminPanelRoutes<U: AdminPanelUserType>(
-        _ type: U.Type,
-        on container: Container
-    ) throws {
-        let config: AdminPanelConfig<U> = try container.make()
-        let middlewares: AdminPanelMiddlewares = try container.make()
-
-        let unprotected = grouped(middlewares.unsecure)
-        let protected = grouped(middlewares.secure)
-
-        let endpoints = config.endpoints
-        let controllers = config.controllers
-
-        let loginController = controllers.loginController
-        let dashboardController = controllers.dashboardController
-        let adminPanelUserController = controllers.adminPanelUserController
-
-        // MARK: Login routes
-
-        unprotected.get(endpoints.login) { req in 
-            try loginController.renderLogin(req)
-        }
-        unprotected.post(endpoints.login) { req in 
-            try loginController.login(req)
-        }
-        unprotected.get(endpoints.logout) { req in 
-            try loginController.logout(req)
-        }
-
-        // MARK: Dashboard routes
-
-        protected.get(endpoints.dashboard) { req in 
-            try dashboardController.renderDashboard(req)
-        }
-
-        // MARK: Admin Panel User routes
-
-        protected.get(endpoints.adminPanelUserBasePath) { req in
-            try adminPanelUserController.renderList(req)
-        }
-        protected.get(endpoints.adminPanelUserBasePath, endpoints.createSlug) { req in
-            try adminPanelUserController.renderCreate(req)
-        }
-        protected.post(endpoints.adminPanelUserBasePath, endpoints.createSlug) { req in
-            try adminPanelUserController.create(req)
-        }
-        protected.get(endpoints.adminPanelUserBasePath, U.parameter, endpoints.editSlug) { req in 
-            try adminPanelUserController.renderEditUser(req)
-        }
-        protected.post(endpoints.adminPanelUserBasePath, U.parameter, endpoints.editSlug) { req in
-            try adminPanelUserController.editUser(req)
-        }
-        protected.post(endpoints.adminPanelUserBasePath, U.parameter, endpoints.deleteSlug) { req in
-            try adminPanelUserController.delete(req)
-        }
-        protected.get(endpoints.adminPanelUserBasePath, endpoints.meSlug, endpoints.editSlug) { req in
-            try adminPanelUserController.renderEditMe(req)
-        }
-        protected.post(endpoints.adminPanelUserBasePath, endpoints.meSlug, endpoints.editSlug) { req in
-            try adminPanelUserController.editMe(req)
-        }
-
-        // MARK: Reset routes
-
-        try unprotected.useResetRoutes(type, on: container)
-    }
+func routes(_ app: Application) throws {
+    let config: AdminPanelConfig = app.adminPanelConfig
+    
+    let loginController = config.controllers.loginController
+    try app.register(collection: loginController)
+    
+    let dashboardController = config.controllers.dashboardController
+    try app.register(collection: dashboardController)
+    
+    let adminPanelUserController = config.controllers.adminPanelUserController
+    try app.register(collection: adminPanelUserController)
 }

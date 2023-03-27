@@ -1,7 +1,5 @@
 import Fluent
 import JWT
-import Reset
-import Sugar
 import Vapor
 
 public struct AdminPanelConfig {
@@ -43,8 +41,8 @@ public struct AdminPanelConfig {
     public let baseURL: String
     public let endpoints: AdminPanelEndpoints
     public let views: AdminPanelViews
-    public let controllers: AdminPanelControllers<U>
-    public let sidebarMenuPathGenerator: SidebarMenuPathGenerator<U.Role>
+    public let controllers: AdminPanelControllers
+    public let sidebarMenuPathGenerator: SidebarMenuPathGenerator
     public let resetEndpoints: ResetEndpoints
     public let resetPasswordEmail: ResetPasswordEmail
     public let resetSigner: JWTSigner
@@ -56,9 +54,8 @@ public struct AdminPanelConfig {
         baseURL: String,
         endpoints: AdminPanelEndpoints = .default,
         views: AdminPanelViews = .default,
-        controllers: AdminPanelControllers<U> = .default,
-        sidebarMenuPathGenerator: @escaping SidebarMenuPathGenerator<U.Role>
-            = U.Role.sidebarMenuPathGenerator,
+        controllers: AdminPanelControllers = .default,
+        sidebarMenuPathGenerator: @escaping SidebarMenuPathGenerator = AdminPanelUser.Role.sidebarMenuPathGenerator,
         resetEndpoints: ResetEndpoints = ResetEndpoints(
             renderResetPasswordRequest: "/admin/users/reset-password/request",
             resetPasswordRequest: "/admin/users/reset-password/request",
@@ -84,7 +81,7 @@ public struct AdminPanelConfig {
     }
 }
 
-public struct AdminPanelControllers<U: AdminPanelUserType> {
+public struct AdminPanelControllers {
     public let loginController: LoginControllerType
     public let dashboardController: DashboardControllerType
     public let adminPanelUserController: AdminPanelUserControllerType
@@ -103,9 +100,9 @@ public struct AdminPanelControllers<U: AdminPanelUserType> {
 extension AdminPanelControllers {
     public static var `default`: AdminPanelControllers {
         return .init(
-            loginController: LoginController<U>(),
-            dashboardController: DashboardController<U>(),
-            adminPanelUserController: AdminPanelUserController<U>()
+            loginController: LoginController(),
+            dashboardController: DashboardController(),
+            adminPanelUserController: AdminPanelUserController()
         )
     }
 }
