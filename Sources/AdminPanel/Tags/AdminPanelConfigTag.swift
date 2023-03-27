@@ -1,9 +1,6 @@
-import Async
 import Leaf
-import Sugar
-import TemplateKit
 
-public final class AdminPanelConfigTag: TagRenderer {
+public final class AdminPanelConfigTag: LeafRenderer {
     public func render(tag: TagContext) throws -> Future<TemplateData> {
         try tag.requireParameterCount(1)
         let request = try tag.requireRequest()

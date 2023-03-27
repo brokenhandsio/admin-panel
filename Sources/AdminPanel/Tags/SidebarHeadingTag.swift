@@ -1,5 +1,4 @@
 import Leaf
-import TemplateKit
 
 public final class SidebarHeadingTag: TagRenderer {
     public func render(tag: TagContext) throws -> Future<TemplateData> {

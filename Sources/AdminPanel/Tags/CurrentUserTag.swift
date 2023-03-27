@@ -1,9 +1,6 @@
-import Authentication
 import Leaf
-import Sugar
-import TemplateKit
 
-public final class CurrentUserTag<U: AdminPanelUserType>: TagRenderer {
+public final class CurrentUserTag<U: AdminPanelUserType>: LeafRenderer {
     public func render(tag: TagContext) throws -> Future<TemplateData> {
         try tag.requireParameterCount(1)
         let request = try tag.requireRequest()

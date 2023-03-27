@@ -1,6 +1,4 @@
 import Leaf
-import Sugar
-import TemplateKit
 
 public final class SidebarMenuItemTag: TagRenderer {
     public func render(tag: TagContext) throws -> Future<TemplateData> {

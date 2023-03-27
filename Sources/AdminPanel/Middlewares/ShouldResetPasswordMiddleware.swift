@@ -1,4 +1,3 @@
-import Authentication
 import Flash
 import Vapor
 

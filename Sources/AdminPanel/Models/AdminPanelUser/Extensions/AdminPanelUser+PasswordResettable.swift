@@ -1,7 +1,5 @@
 import Mailgun
-import Reset
 import Submissions
-import Sugar
 import Vapor
 
 extension AdminPanelUser: PasswordResettable {

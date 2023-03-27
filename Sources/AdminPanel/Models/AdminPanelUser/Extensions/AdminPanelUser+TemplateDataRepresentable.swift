@@ -1,7 +1,7 @@
-import TemplateKit
+import LeafKit
 
-extension AdminPanelUser: TemplateDataRepresentable {
-    public func convertToTemplateData() throws -> TemplateData {
+extension AdminPanelUser: LeafDataRepresentable {
+    public func convertToTemplateData() throws -> LeafData {
         return .dictionary([
             "id": id.map(TemplateData.int) ?? .null,
             "email": .string(email),

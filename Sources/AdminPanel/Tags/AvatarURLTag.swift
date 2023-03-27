@@ -1,7 +1,6 @@
-import Leaf
-import TemplateKit
+import LeafKit
 
-public final class AvatarURLTag: TagRenderer {
+public final class AvatarURLTag: LeafRenderer {
     public func render(tag: TagContext) throws -> Future<TemplateData> {
         var identifier = ""
         var url: String?

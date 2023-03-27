@@ -1,6 +1,4 @@
 import Leaf
-import Authentication
-import Sugar
 
 public final class HasRequiredRole<U: AdminPanelUserType>: TagRenderer {
     public func render(tag: TagContext) throws -> Future<TemplateData> {

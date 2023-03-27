@@ -21,17 +21,6 @@ extension ValidatorResults.StrongPassword: ValidatorResult {
     }
 }
 
-struct Stuff {
-    let strongPasswordRegex = Regex {
-        Anchor.startOfSubject
-        Lookahead {
-            OneOrMore(.any)
-            "A"..."Z"
-        }
-        Anchor.endOfSubject
-    }
-}
-
 extension Validator where T == String {
     private static var strongPasswordRegex = Regex {
         Anchor.startOfSubject

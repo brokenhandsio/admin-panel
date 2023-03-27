@@ -2,7 +2,6 @@ import Fluent
 import Vapor
 
 extension AdminPanelUser: ModelAuthenticatable {
-    
     public static let usernameKey = \AdminPanelUser.$email
     public static let passwordHashKey = \AdminPanelUser.$password
     
