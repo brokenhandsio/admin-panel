@@ -1,32 +1,39 @@
 import Fluent
 import Vapor
 
-public enum AdminPanelUserRole: String {
-    case superAdmin
-    case admin
-    case user
+public protocol RoleType: LosslessStringConvertible, Comparable, Codable {
+    var menuPath: String { get }
+}
 
-    public var weight: UInt {
-        switch self {
-        case .superAdmin: return 3
-        case .admin: return 2
-        case .user: return 1
+extension AdminPanelUser {
+    public enum Role: String {
+        case superAdmin
+        case admin
+        case user
+
+        public var weight: UInt {
+            switch self {
+            case .superAdmin: return 3
+            case .admin: return 2
+            case .user: return 1
+            }
         }
-    }
 
-    public typealias RawValue = String
+        public typealias RawValue = String
 
-    public init?(rawValue: String?) {
-        switch rawValue {
-        case AdminPanelUserRole.superAdmin.rawValue: self = .superAdmin
-        case AdminPanelUserRole.admin.rawValue: self = .admin
-        case AdminPanelUserRole.user.rawValue: self = .user
-        default: return nil
+        public init?(rawValue: String?) {
+            switch rawValue {
+            case Role.superAdmin.rawValue: self = .superAdmin
+            case Role.admin.rawValue: self = .admin
+            case Role.user.rawValue: self = .user
+            default: return nil
+            }
         }
     }
 }
 
-extension AdminPanelUserRole: AdminPanelUserRoleType {
+
+extension AdminPanelUser.Role: RoleType {
     public var menuPath: String {
         switch self {
         case .superAdmin:
@@ -39,7 +46,7 @@ extension AdminPanelUserRole: AdminPanelUserRoleType {
     }
 
     public init?(_ description: String) {
-        guard let role = AdminPanelUserRole(rawValue: description) else {
+        guard let role = AdminPanelUser.Role(rawValue: description) else {
             return nil
         }
 
@@ -50,14 +57,27 @@ extension AdminPanelUserRole: AdminPanelUserRoleType {
         return self.rawValue
     }
 
-    public static func < (lhs: AdminPanelUserRole, rhs: AdminPanelUserRole) -> Bool {
+    public static func < (lhs: AdminPanelUser.Role, rhs: AdminPanelUser.Role) -> Bool {
         return lhs.weight < rhs.weight
     }
 
-    public static func == (lhs: AdminPanelUserRole, rhs: AdminPanelUserRole) -> Bool {
+    public static func == (lhs: AdminPanelUser.Role, rhs: AdminPanelUser.Role) -> Bool {
         return lhs.weight == rhs.weight
     }
 }
 
-extension AdminPanelUserRole: CaseIterable {}
-extension AdminPanelUserRole: Content {}
+extension AdminPanelUser {
+    func requireRole(role: AdminPanelUser.Role?) throws -> AdminPanelUser.Role {
+        guard
+            let selfRole = self.role,
+            let role = role,
+            selfRole >= role
+        else {
+            throw Abort(.unauthorized)
+        }
+        return role
+    }
+}
+
+extension AdminPanelUser.Role: CaseIterable {}
+extension AdminPanelUser.Role: Content {}

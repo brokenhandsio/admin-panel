@@ -6,6 +6,8 @@ public struct AdminPanelEndpoints {
     public let logout: String
     public let dashboard: String
     public let adminPanelUserBasePath: String
+    public let resetPassword: String
+    public let resetPasswordSuccess: String
 
     public let createSlug: String
     public let deleteSlug: String
@@ -17,6 +19,8 @@ public struct AdminPanelEndpoints {
         dashboard: String = "/admin",
         login: String = "/admin/login",
         logout: String = "/admin/logout",
+        resetPassword: String = "/admin/users/reset-password",
+        resetPasswordSuccess: String = "/admin/users/reset-password/success",
 
         createSlug: String = "create",
         deleteSlug: String = "delete",
@@ -27,6 +31,8 @@ public struct AdminPanelEndpoints {
         self.logout = logout
         self.dashboard = dashboard
         self.adminPanelUserBasePath = adminPanelUserBasePath
+        self.resetPassword = resetPassword
+        self.resetPasswordSuccess = resetPasswordSuccess
 
         self.createSlug = createSlug
         self.deleteSlug = deleteSlug

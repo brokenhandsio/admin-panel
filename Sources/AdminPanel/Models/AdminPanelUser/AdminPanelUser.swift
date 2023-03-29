@@ -2,7 +2,7 @@ import Fluent
 import Vapor
 
 public final class AdminPanelUser: Model {
-    public static var schema: String = "admin_panel_user"
+    public static var schema: String = "admin_panel_users"
     
     @ID(custom: .id)
     public var id: Int?
@@ -20,7 +20,7 @@ public final class AdminPanelUser: Model {
     public var avatarURL: String?
 
     @Field(key: "role")
-    public var role: AdminPanelUserRole?
+    public var role: AdminPanelUser.Role?
 
     @Field(key: "password")
     public var password: String
@@ -48,7 +48,7 @@ public final class AdminPanelUser: Model {
         name: String,
         title: String? = nil,
         avatarURL: String? = nil,
-        role: AdminPanelUserRole?,
+        role: AdminPanelUser.Role?,
         password: String,
         passwordChangeCount: Int = 0,
         shouldResetPassword: Bool = false

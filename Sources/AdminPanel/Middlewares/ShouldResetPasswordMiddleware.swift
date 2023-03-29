@@ -2,34 +2,33 @@ import Flash
 import Vapor
 
 /// Basic middleware to redirect users that needs to reset their password to the supplied path
-public struct ShouldResetPasswordMiddleware: Middleware {
-
+public struct ShouldResetPasswordMiddleware: AsyncMiddleware {
+    
     /// The path to redirect to
     let path: String
-
+    
     /// Initialise the `ShouldResetPasswordMiddleware`
     ///
     /// - parameters:
-    ///    - authenticatableType: The type to check if reset password is required
     ///    - path: The path to redirect to if the user needs to reset their password
-    public init(U authenticatableType: U.Type = U.self, path: String) {
+    public init(path: String) {
         self.path = path
     }
-
+    
     /// See `Middleware.respond`.
-    public func respond(to req: Request, chainingTo next: Responder) throws -> Future<Response> {
+    public func respond(to req: Request, chainingTo next: AsyncResponder) async throws -> Response {
+        let user = try req.auth.require(AdminPanelUser.self)
         guard
-            let user = try req.authenticated(U.self),
             user.shouldResetPassword,
-            req.http.urlString != path
+            req.url.path != path
         else {
-            return try next.respond(to: req)
+            return try await next.respond(to: req)
         }
-
-        let redirect = req.redirect(to: path).flash(.info, "Please update your password.")
-        return req.eventLoop.newSucceededFuture(result: redirect)
+        
+        return req.redirect(to: path)
+            .flash(.info, "Please update your password.")
     }
-
+    
     /// Use this middleware to redirect users away from
     /// protected content to a edit page when they need to reset their password
     public static func shouldResetPassword(

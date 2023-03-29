@@ -30,7 +30,7 @@ extension AdminPanelUser {
     }
 }
 
-extension String {
+fileprivate extension String {
     static func randomAlphaNumericString(_ length: Int) -> String {
         let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
         let allowedCharsCount = UInt32(allowedChars.count)
@@ -44,5 +44,4 @@ extension String {
 
         return randomString
     }
-
 }

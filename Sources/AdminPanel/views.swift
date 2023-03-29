@@ -41,13 +41,25 @@ public struct AdminPanelViews {
     public struct Reset {
         public let requestResetPasswordEmail: String
         public let newUserResetPasswordEmail: String
+        public let requestResetPasswordForm: String
+        public let requestResetPasswordSuccess: String
+        public let resetPasswordForm: String
+        public let resetPasswordSuccess: String
 
         public init(
             requestResetPasswordEmail: String = prefix + "/Reset/request-reset-password-email",
-            newUserResetPasswordEmail: String = prefix + "/Reset/new-user-reset-password-email"
+            newUserResetPasswordEmail: String = prefix + "/Reset/new-user-reset-password-email",
+            requestResetPasswordForm: String = prefix + "/Reset/reset-password-request-form",
+            requestResetPasswordSuccess: String = prefix + "/Reset/reset-password-request-success",
+            resetPasswordForm: String = prefix + "/Reset/reset-password-form",
+            resetPasswordSuccess: String = prefix + "/Reset/reset-password-success"
         ) {
             self.requestResetPasswordEmail = requestResetPasswordEmail
             self.newUserResetPasswordEmail = newUserResetPasswordEmail
+            self.requestResetPasswordForm = requestResetPasswordForm
+            self.requestResetPasswordSuccess = requestResetPasswordSuccess
+            self.resetPasswordForm = resetPasswordForm
+            self.resetPasswordSuccess = resetPasswordSuccess
         }
     }
 
