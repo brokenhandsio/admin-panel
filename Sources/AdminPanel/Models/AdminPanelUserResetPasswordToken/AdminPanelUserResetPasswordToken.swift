@@ -20,12 +20,16 @@ public final class ResetPasswordToken: Model {
 
     public init(
         id: Int? = nil,
-        token: String,
+        token: String? = nil,
         expiration: Date,
         userId: AdminPanelUser.IDValue
     ) {
         self.id = id
-        self.token = token
+        if let token {
+            self.token = token
+        } else {
+            self.token = Self.generateTokenString()
+        }
         self.expiration = expiration
         self.$user.id = userId
     }

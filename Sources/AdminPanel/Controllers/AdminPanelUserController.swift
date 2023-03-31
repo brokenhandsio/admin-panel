@@ -35,7 +35,7 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
         let users = try await AdminPanelUser.query(on: req.db).paginate(for: req)
         
         return try await req.leaf.render(
-            req.adminPanelConfig.views.adminPanelUser.index,
+            req.adminPanel.config.views.adminPanelUser.index,
             users
         )
     }
@@ -43,7 +43,7 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
     // MARK: Create user routes
     
     public func createHandler(_ req: Request) async throws -> View {
-        try await req.leaf.render(req.adminPanelConfig.views.adminPanelUser.editAndCreate)
+        try await req.leaf.render(req.adminPanel.config.views.adminPanelUser.editAndCreate)
     }
     
     public func createPostHandler(_ req: Request) async throws -> Response {
@@ -52,14 +52,23 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
         let user = try AdminPanelUser(userCreate)
         try await user.create(on: req.db)
         
-        // TODO: psw reset stuff
+        let resetToken = try user.generateResetPasswordToken(context: .newUserWithoutPassword)
+        try await resetToken.save(on: req.db)
         
-//        guard try userCreate.shouldSpecifyPassword == true else {
-//            let config: ResetConfig<AdminPanelUser> = try req.make()
-//            return try config.reset(self, context: .newUserWithoutPassword, on: req)
-//        }
+        let url = req.adminPanel.config.baseURL.appending(
+            "\(req.adminPanel.config.endpoints.resetPassword)/\(resetToken)"
+        )
+                
+        guard userCreate.shouldSpecifyPassword == true else {
+            return try await req.adminPanel.requestPasswordReset(
+                for: user,
+                url: url,
+                token: resetToken,
+                context: .newUserWithoutPassword
+            )
+        }
         
-        return req.redirect(to: req.adminPanelConfig.endpoints.adminPanelUserBasePath)
+        return req.redirect(to: req.adminPanel.config.endpoints.adminPanelUserBasePath)
             .flash(
                 .success,
                 "The user with email '\(user.email)' " +
@@ -103,7 +112,7 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
         let authedUser = try req.auth.require(AdminPanelUser.self)
         let userId = try req.parameters.require("userId")
         let user = try await AdminPanelUser.find(Int(userId), on: req.db)
-        let config = req.adminPanelConfig
+        let config = req.adminPanel.config
         
         guard let user else {
             throw Abort(.notFound, reason: "User with id \(userId) not found")
@@ -135,14 +144,14 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
         }
         
         return try await req.leaf.render(
-            req.adminPanelConfig.views.adminPanelUser.editAndCreate,
+            req.adminPanel.config.views.adminPanelUser.editAndCreate,
             user
         )
     }
     
     private func editPostHandler(_ req: Request, user: AdminPanelUser) async throws -> Response {
         try AdminPanelUser.Create.validate(content: req)
-        let config = req.adminPanelConfig
+        let config = req.adminPanel.config
         
         let updatedData = try req.content.decode(AdminPanelUser.Create.self)
         let updatedUser = try AdminPanelUser(updatedData)

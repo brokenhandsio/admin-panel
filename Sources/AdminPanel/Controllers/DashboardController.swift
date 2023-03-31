@@ -13,6 +13,6 @@ public final class DashboardController: DashboardControllerType {
     }
     
     public func dashboardHandler(_ req: Request) async throws -> View {
-        try await req.leaf.render(req.adminPanelConfig.views.dashboard.index)
+        try await req.leaf.render(req.adminPanel.config.views.dashboard.index)
     }
 }

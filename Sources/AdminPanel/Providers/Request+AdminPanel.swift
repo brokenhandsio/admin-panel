@@ -1,16 +1,15 @@
 import Vapor
 
 extension Request {
-    private struct AdminPanelKey: StorageKey {
-        typealias Value = AdminPanelConfig
+    public var adminPanel: AdminPanel {
+        .init(request: self)
     }
     
-    private func initialize() -> AdminPanelConfig {
-        self.application.storage[AdminPanelKey.self] = AdminPanelConfig(request: self)
-        return self.application.storage[AdminPanelKey.self]!
-    }
-    
-    public var adminPanelConfig: AdminPanelConfig {
-        self.application.storage[AdminPanelKey.self] ?? self.initialize()
+    public struct AdminPanel {
+        let request: Request
+        
+        var config: AdminPanelConfig {
+            request.application.adminPanel.config
+        }
     }
 }

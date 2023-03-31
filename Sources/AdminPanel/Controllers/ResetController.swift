@@ -21,11 +21,10 @@ final class ResetController: ResetControllerType {
         adminAuthSessionRoutes.post("request", use: requestPasswordResetPostHandler)
         adminAuthSessionRoutes.get(use: resetPasswordHandler)
         adminAuthSessionRoutes.post(use: resetPasswordPostHandler)
-        adminAuthSessionRoutes.get("success", use: resetPasswordSuccessHandler)
     }
     
     func requestPasswordResetHandler(_ req: Request) async throws -> View {
-        try await req.leaf.render(req.adminPanelConfig.views.reset.requestResetPasswordForm)
+        try await req.leaf.render(req.adminPanel.config.views.reset.requestResetPasswordForm)
     }
     
     func requestPasswordResetPostHandler(_ req: Request) async throws -> Response {
@@ -39,33 +38,28 @@ final class ResetController: ResetControllerType {
         }
         
         // Creates a token with an expiration to be sent in the reset password url
-        let resetTokenString = ResetPasswordToken.generateTokenString()
-        let expiration = AdminPanelUser.ResetPasswordContext.expirationPeriod(
-            for: .userRequestedToResetPassword
-        )
-        let resetToken = ResetPasswordToken(
-            token: resetTokenString,
-            expiration: Date().addingTimeInterval(expiration), // Adds one hour
-            userId: try user.requireID()
-        )
+        let resetToken = try user.generateResetPasswordToken(context: .userRequestedToResetPassword)
         try await resetToken.save(on: req.db)
         
         // Creates the url the user has to visit to update the password
-        let url = req.adminPanelConfig.baseURL.appending(
-            "\(req.adminPanelConfig.endpoints.resetPassword)/\(resetToken)"
+        let url = req.adminPanel.config.baseURL.appending(
+            "\(req.adminPanel.config.endpoints.resetPassword)/\(resetToken)"
         )
         
-        // Sents an email to the user containing the url
-        return try await req.requestPasswordReset(
+        // Sends an email to the user containing the url
+        _ = try await req.adminPanel.requestPasswordReset(
             for: user,
             url: url,
             token: resetToken,
             context: .userRequestedToResetPassword
         )
+        
+        return req.redirect(to: req.adminPanel.config.endpoints.login)
+            .flash(.success, "Email with reset link sent")
     }
     
     func resetPasswordHandler(_ req: Request) async throws -> View {
-        try await req.leaf.render(req.adminPanelConfig.views.reset.resetPasswordForm)
+        try await req.leaf.render(req.adminPanel.config.views.reset.resetPasswordForm)
     }
     
     func resetPasswordPostHandler(_ req: Request) async throws -> Response {
@@ -73,16 +67,15 @@ final class ResetController: ResetControllerType {
         let data = try req.content.decode(ResetPasswordData.self)
         guard data.password == data.passwordConfirmation else {
             return try await req.flash(.error, "The two passwords don't match")
-                .leaf.render(req.adminPanelConfig.views.reset.resetPasswordForm)
+                .leaf.render(req.adminPanel.config.views.reset.resetPasswordForm)
                 .encodeResponse(for: req)
         }
         user.password = try Bcrypt.hash(data.password)
         try await user.save(on: req.db)
-        return req.redirect(to: req.adminPanelConfig.endpoints.resetPasswordSuccess)
-    }
-    
-    func resetPasswordSuccessHandler(_ req: Request) async throws -> View {
-        try await req.leaf.render(req.adminPanelConfig.views.reset.resetPasswordSuccess)
+        return try await req
+            .flash(.success, "Your password has been updated")
+            .leaf.render(req.adminPanel.config.views.reset.resetPasswordSuccess)
+            .encodeResponse(for: req)
     }
 }
 

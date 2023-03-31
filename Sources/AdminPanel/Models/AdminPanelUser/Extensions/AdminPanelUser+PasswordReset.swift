@@ -18,14 +18,13 @@ extension AdminPanelUser {
     }
 }
 
-extension Request {
+extension Request.AdminPanel {
     public func requestPasswordReset(
         for user: AdminPanelUser,
         url: String,
         token: ResetPasswordToken,
         context: AdminPanelUser.ResetPasswordContext
     ) async throws -> Response {
-        let config = self.adminPanelConfig
         var from: String
         var subject: String
         var view: String
@@ -44,7 +43,7 @@ extension Request {
         let expiration = (Int(token.expiration.timeIntervalSinceNow) / 60 ) % 60
         let emailData = ResetPasswordEmail(url: url, expire: expiration)
         
-        let html: View = try await self.leaf.render(view, emailData)
+        let html: View = try await request.leaf.render(view, emailData)
         let htmlString = String(buffer: html.data)
         
         let message = MailgunMessage(
@@ -54,8 +53,8 @@ extension Request {
             text: "Please turn on html to view this email.",
             html: htmlString
         )
-        return try await self.mailgun().send(message)
-            .encodeResponse(for: self).get()
+        return try await request.mailgun().send(message)
+            .encodeResponse(for: request).get()
     }
 }
 

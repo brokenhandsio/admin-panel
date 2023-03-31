@@ -12,11 +12,9 @@ public struct AdminPanelProvider {
     init(_ app: Application) {
         self.application = app
     }
-
-    /// See Service.Provider.repositoryName
-    public static var repositoryName: String { return "admin-panel" }
     
     public func configure(_ app: Application) throws {
+        let config = app.adminPanel.config
         // MARK: Leaf
         app.views.use(.leaf)
         app.leaf.tags["flashes"] = FlashTag()
@@ -26,45 +24,14 @@ public struct AdminPanelProvider {
         
         // MARK: Middleware
         app.middleware.use(FlashMiddleware())
-        app.middleware.use(RedirectMiddleware())
-        app.middleware.use(ShouldResetPasswordMiddleware())
+//        app.middleware.use(RedirectMiddleware())
+        app.middleware.use(ShouldResetPasswordMiddleware(
+            path: "\(config.endpoints.adminPanelUserBasePath)/\(config.endpoints.meSlug)/\(config.endpoints.editSlug)")
+        )
         app.middleware.use(app.sessions.middleware)
         app.middleware.use(AdminPanelUser.asyncSessionAuthenticator())
     }
 }
-
-//extension ResetResponses {
-//    static func adminPanel<U: AdminPanelUserType>(config: AdminPanelConfig<U>) -> ResetResponses {
-//        return ResetResponses(
-//            resetPasswordRequestForm: { [config] req in
-//                try req
-//                    .view()
-//                    .render(config.views.login.requestResetPassword, on: req)
-//                    .encode(for: req)
-//            },
-//            resetPasswordUserNotified: { [config] req in
-//                req.future(req
-//                    .redirect(to: config.endpoints.login)
-//                    .flash(.success, "Email with reset link sent.")
-//                )
-//            },
-//            resetPasswordForm: { [config] req, _ in
-//                try req.addFields(forType: U.self)
-//                return try req
-//                    .view()
-//                    .render(config.views.login.resetPassword, on: req)
-//                    .encode(for: req)
-//            },
-//            resetPasswordSuccess: { [config] req, _ in
-//                req.future(req
-//                    // TODO: make configurable
-//                    .redirect(to: config.endpoints.login)
-//                    .flash(.success, "Your password has been updated.")
-//                )
-//            }
-//        )
-//    }
-//}
 
 //public extension LeafTagConfig {
 //    mutating func useAdminPanelLeafTags<U: AdminPanelUserType>(

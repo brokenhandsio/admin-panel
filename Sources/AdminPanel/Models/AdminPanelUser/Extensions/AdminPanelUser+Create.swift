@@ -23,7 +23,7 @@ extension AdminPanelUser {
             email: create.email,
             name: create.name,
             title: create.title,
-            role: AdminPanelUserRole(rawValue: create.role),
+            role: AdminPanelUser.Role(rawValue: create.role),
             password: Bcrypt.hash(password),
             shouldResetPassword: create.shouldResetPassword ?? false
         )

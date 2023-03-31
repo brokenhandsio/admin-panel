@@ -26,7 +26,7 @@ public final class LoginController: LoginControllerType {
     // MARK: Login
 
     public func loginPostHandler(_ req: Request) async throws -> Response {
-        let endpoints = req.adminPanelConfig.endpoints
+        let endpoints = req.adminPanel.config.endpoints
         if let user = req.auth.get(AdminPanelUser.self) {
             try await user.generateToken().save(on: req.db)
             return req.redirect(to: endpoints.dashboard)
@@ -38,12 +38,12 @@ public final class LoginController: LoginControllerType {
     }
 
     public func loginHandler(_ req: Request) async throws -> View {
-        let endpoints = req.adminPanelConfig.endpoints
+        let endpoints = req.adminPanel.config.endpoints
         if req.auth.has(AdminPanelUser.self) {
-            return try await req.leaf.render(req.adminPanelConfig.endpoints.dashboard)
+            return try await req.leaf.render(req.adminPanel.config.endpoints.dashboard)
         } else {
             return try await req.leaf.render(
-                req.adminPanelConfig.views.login.index,
+                req.adminPanel.config.views.login.index,
                 RenderLogin(queryString: req.url.query)
             )
         }
@@ -52,7 +52,7 @@ public final class LoginController: LoginControllerType {
     // MARK: Log out
 
     public func logoutHandler(_ req: Request) async throws -> Response {
-        let endpoints = req.adminPanelConfig.endpoints
+        let endpoints = req.adminPanel.config.endpoints
         req.auth.logout(AdminPanelUser.self)
         return req.redirect(to: endpoints.login).flash(.success, "Logged out")
     }
