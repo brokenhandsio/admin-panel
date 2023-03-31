@@ -59,8 +59,8 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
             "\(req.adminPanel.config.endpoints.resetPassword)/\(resetToken)"
         )
                 
-        guard userCreate.shouldSpecifyPassword == true else {
-            return try await req.adminPanel.requestPasswordReset(
+        if userCreate.shouldSpecifyPassword == false {
+            _ = try await req.adminPanel.requestPasswordReset(
                 for: user,
                 url: url,
                 token: resetToken,
@@ -166,5 +166,4 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
                 "got updated successfully."
             )
     }
-
 }
