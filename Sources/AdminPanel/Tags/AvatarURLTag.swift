@@ -1,13 +1,13 @@
 import LeafKit
 
-public final class AvatarURLTag: LeafRenderer {
-    public func render(tag: TagContext) throws -> Future<TemplateData> {
+public struct AvatarURLTag: LeafTag {
+    public func render(_ ctx: LeafContext) throws -> LeafData {
         var identifier = ""
         var url: String?
-
+        
         for index in 0...1 {
             if
-                let param = tag.parameters[safe: index]?.string,
+                let param = ctx.parameters[index].string,
                 !param.isEmpty
             {
                 switch index {
@@ -17,9 +17,8 @@ public final class AvatarURLTag: LeafRenderer {
                 }
             }
         }
-
+        
         let avatarURL = url ?? "https://api.adorable.io/avatars/150/\(identifier).png"
-
-        return tag.future(.string(avatarURL))
+        return .string(avatarURL)
     }
 }
