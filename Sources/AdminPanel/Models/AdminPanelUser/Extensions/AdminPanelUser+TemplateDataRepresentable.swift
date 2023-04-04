@@ -1,14 +1,14 @@
 import LeafKit
 
 extension AdminPanelUser: LeafDataRepresentable {
-    public func convertToTemplateData() throws -> LeafData {
-        return .dictionary([
-            "id": id.map(TemplateData.int) ?? .null,
+    public var leafData: LeafData {
+        .dictionary([
+            "id": .int(id),
             "email": .string(email),
             "name": .string(name),
-            "title": title.map(TemplateData.string) ?? .null,
-            "avatarURL": avatarURL.map(TemplateData.string) ?? .null,
-            "role": role.map { .string($0.description) } ?? .null
+            "title": title.map { .string($0) } ?? .nil(.string),
+            "avatarURL": avatarURL.map { .string($0) } ?? .nil(.string),
+            "role": role.map { .string($0.description) } ?? .nil(.string)
         ])
     }
 }

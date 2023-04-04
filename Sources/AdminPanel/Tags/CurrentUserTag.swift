@@ -1,20 +1,17 @@
 import Leaf
 
-public final class CurrentUserTag<U: AdminPanelUserType>: LeafRenderer {
-    public func render(tag: TagContext) throws -> Future<TemplateData> {
-        try tag.requireParameterCount(1)
-        let request = try tag.requireRequest()
-        let container = try request.privateContainer.make(CurrentUserContainer<U>.self)
-
+public struct CurrentUserTag: LeafTag {
+    public func render(_ ctx: LeafContext) throws -> LeafData {
+        try ctx.requireParameterCount(1)
+        
         guard
-            let user = container.user,
-            let data = try user.convertToTemplateData().dictionary,
-            let key = tag.parameters[0].string,
+            let user = ctx.request?.auth.get(AdminPanelUser.self),
+            let data = user.leafData.dictionary,
+            let key = ctx.parameters[0].string,
             let value = data[key]
         else {
-            throw tag.error(reason: "No user is logged in or the key doesn't exist.")
+            throw "No user is logged in or the key doesn't exist."
         }
-
-        return tag.future(value)
+        return value
     }
 }
