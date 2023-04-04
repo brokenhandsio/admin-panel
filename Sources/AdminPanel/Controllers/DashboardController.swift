@@ -7,9 +7,7 @@ public protocol DashboardControllerType: RouteCollection {
 
 public final class DashboardController: DashboardControllerType {
     public func boot(routes: RoutesBuilder) throws {
-        let adminAuthSessionRoutes = routes
-            .grouped(AdminPanelUser.sessionAuthenticator())
-        adminAuthSessionRoutes.get("admin", use: dashboardHandler)
+        routes.get("", use: dashboardHandler)
     }
     
     public func dashboardHandler(_ req: Request) async throws -> View {

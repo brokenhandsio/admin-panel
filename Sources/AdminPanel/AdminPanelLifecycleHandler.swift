@@ -6,15 +6,14 @@ import Leaf
 import Submissions
 import Vapor
 
-public struct AdminPanelProvider {
-    let application: Application?
+public class AdminPanelLifecycleHandler: LifecycleHandler {
+    var config: AdminPanelConfig
     
-    init(_ app: Application) {
-        self.application = app
+    public init(config: AdminPanelConfig) {
+        self.config = config
     }
     
-    public func configure(_ app: Application) throws {
-        let config = app.adminPanel.config
+    public func willBoot(_ app: Application) throws {
         // MARK: Leaf
         app.views.use(.leaf)
         app.leaf.tags["flashes"] = FlashTag()
@@ -22,14 +21,33 @@ public struct AdminPanelProvider {
         // MARK: Commands
 //        app.commands.use(AdminPanelUserSeedCommand(), as: "adminpanel:user-seeder")
         
-        // MARK: Middleware
         app.middleware.use(FlashMiddleware())
-//        app.middleware.use(RedirectMiddleware())
         app.middleware.use(ShouldResetPasswordMiddleware(
-            path: "\(config.endpoints.adminPanelUserBasePath)/\(config.endpoints.meSlug)/\(config.endpoints.editSlug)")
-        )
+            path: "\(config.endpoints.adminPanelUserBasePath)/\(config.endpoints.meSlug)/\(config.endpoints.editSlug)"
+        ))
         app.middleware.use(app.sessions.middleware)
         app.middleware.use(AdminPanelUser.asyncSessionAuthenticator())
+        try registerRoutes(app)
+    }
+    
+    func registerRoutes(_ app: Application) throws {
+        let adminPanelRoutes = app.routes.grouped("admin")
+        
+        let loginController = LoginController()
+        try adminPanelRoutes.register(collection: loginController)
+        
+        let sessionedRoutes = adminPanelRoutes.grouped(AdminPanelUser.asyncSessionAuthenticator())
+        
+        let dashboardController = DashboardController()
+        try sessionedRoutes.register(collection: dashboardController)
+        
+        let usersSessionedRoutes = sessionedRoutes.grouped("users")
+        
+        let adminPanelUserController = AdminPanelUserController()
+        try usersSessionedRoutes.register(collection: adminPanelUserController)
+        
+        let resetController = ResetController()
+        try usersSessionedRoutes.register(collection: resetController)
     }
 }
 

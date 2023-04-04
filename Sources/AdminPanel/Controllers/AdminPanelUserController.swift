@@ -16,17 +16,16 @@ public protocol AdminPanelUserControllerType: RouteCollection {
 
 public final class AdminPanelUserController: AdminPanelUserControllerType {
     public func boot(routes: RoutesBuilder) throws {
-        let adminAuthSessionRoutes = routes
-            .grouped(AdminPanelUser.sessionAuthenticator())
-            .grouped("admin", "users")
-        adminAuthSessionRoutes.get(use: listHandler)
-        adminAuthSessionRoutes.get("create", use: createHandler)
-        adminAuthSessionRoutes.post("create", use: createPostHandler)
+        let usersSessionRoutes = routes
+            .grouped("users")
+        usersSessionRoutes.get(use: listHandler)
+        usersSessionRoutes.get("create", use: createHandler)
+        usersSessionRoutes.post("create", use: createPostHandler)
                 
-        adminAuthSessionRoutes.get(":userId", "edit", use: editUserHandler)
-        adminAuthSessionRoutes.post(":userId", "edit", use: editUserPostHandler)
-        adminAuthSessionRoutes.get("me", "edit", use: editMeHandler)
-        adminAuthSessionRoutes.post("me", "edit", use: editMePostHandler)
+        usersSessionRoutes.get(":userId", "edit", use: editUserHandler)
+        usersSessionRoutes.post(":userId", "edit", use: editUserPostHandler)
+        usersSessionRoutes.get("me", "edit", use: editMeHandler)
+        usersSessionRoutes.post("me", "edit", use: editMePostHandler)
     }
     
     // MARK: List

@@ -14,13 +14,12 @@ protocol ResetControllerType: RouteCollection {
 
 final class ResetController: ResetControllerType {
     func boot(routes: RoutesBuilder) throws {
-        let adminAuthSessionRoutes = routes
-            .grouped(AdminPanelUser.sessionAuthenticator())
-            .grouped("admin", "users", "reset-password")
-        adminAuthSessionRoutes.get("request", use: requestPasswordResetHandler)
-        adminAuthSessionRoutes.post("request", use: requestPasswordResetPostHandler)
-        adminAuthSessionRoutes.get(use: resetPasswordHandler)
-        adminAuthSessionRoutes.post(use: resetPasswordPostHandler)
+        let resetPasswordRoutes = routes
+            .grouped("users", "reset-password")
+        resetPasswordRoutes.get("request", use: requestPasswordResetHandler)
+        resetPasswordRoutes.post("request", use: requestPasswordResetPostHandler)
+        resetPasswordRoutes.get(use: resetPasswordHandler)
+        resetPasswordRoutes.post(use: resetPasswordPostHandler)
     }
     
     func requestPasswordResetHandler(_ req: Request) async throws -> View {

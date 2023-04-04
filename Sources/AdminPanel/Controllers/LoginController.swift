@@ -12,13 +12,12 @@ public protocol LoginControllerType: RouteCollection {
 public final class LoginController: LoginControllerType {
     public func boot(routes: RoutesBuilder) throws {
         let adminAuthSessionRoutes = routes
-            .grouped(AdminPanelUser.sessionAuthenticator())
-            .grouped("admin")
+            .grouped(AdminPanelUser.asyncSessionAuthenticator())
         adminAuthSessionRoutes.get("login", use: loginHandler)
         adminAuthSessionRoutes.get("logout", use: logoutHandler)
 
         let credentialsAuthRoutes = adminAuthSessionRoutes.grouped(
-            AdminPanelUser.credentialsAuthenticator()
+            AdminPanelUser.asyncCredentialsAuthenticator()
         )
         credentialsAuthRoutes.post("login", use: loginPostHandler)
     }
