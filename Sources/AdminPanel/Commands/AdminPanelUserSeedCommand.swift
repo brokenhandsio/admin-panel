@@ -10,7 +10,7 @@ final class AdminPanelUserSeedCommand: AsyncCommand {
         var email: String?
         
         @Option(name: "password", short: "p", help: "The password of the user to seed.")
-        var password: String
+        var password: String?
         
         @Option(name: "name", short: "n", help: "The name of the user to seed.")
         var name: String?
@@ -21,16 +21,19 @@ final class AdminPanelUserSeedCommand: AsyncCommand {
     }
     
     func run(using context: CommandContext, signature: Signature) async throws {
-        let password = signature.password
-        let email = signature.email ?? SeedAdminPanelUserCommand.defaultEmail
-        let name = signature.name ?? SeedAdminPanelUserCommand.defaultName
+        guard let password = signature.password else {
+            throw Abort(.internalServerError, reason: "Missing password argument")
+        }
+        
+        let email = signature.email ?? AdminPanelUserSeedCommand.defaultEmail
+        let name = signature.name ?? AdminPanelUserSeedCommand.defaultName
         
         let user = try AdminPanelUser(
             email: email,
             name: name,
             title: "Tester",
             role: .superAdmin,
-            password: AdminPanelUser.hashPassword(password)
+            password: Bcrypt.hash(password)
         )
         
         try await user.create(on: context.application.db)
