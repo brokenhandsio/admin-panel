@@ -17,7 +17,10 @@ public struct ShouldResetPasswordMiddleware: AsyncMiddleware {
     
     /// See `Middleware.respond`.
     public func respond(to req: Request, chainingTo next: AsyncResponder) async throws -> Response {
-        let user = try req.auth.require(AdminPanelUser.self)
+        let user = req.auth.get(AdminPanelUser.self)
+        guard let user else {
+            return try await next.respond(to: req)
+        }
         guard
             user.shouldResetPassword,
             req.url.path != path
