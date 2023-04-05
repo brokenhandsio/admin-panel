@@ -2,14 +2,12 @@
 import PackageDescription
 
 let package = Package(
-    name: "AdminPanel",
+    name: "admin-panel",
     platforms: [
         .macOS(.v13)
     ],
     products: [
-        .library(
-            name: "AdminPanel",
-            targets: ["AdminPanel"]),
+        .library(name: "AdminPanel", targets: ["AdminPanel"]),
     ],
     dependencies: [
         .package(url: "https://github.com/nodes-vapor/flash.git", branch: "master"),
@@ -23,8 +21,7 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "AdminPanel",
-            dependencies: [
+            name: "AdminPanel", dependencies: [
                 .product(name: "Flash", package: "flash"),
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentMySQLDriver", package: "fluent-mysql-driver"),
@@ -36,6 +33,6 @@ let package = Package(
             ]),
         .testTarget(
             name: "AdminPanelTests",
-            dependencies: ["AdminPanel"]),
+            dependencies: [.target(name: "AdminPanel")]),
     ]
 )

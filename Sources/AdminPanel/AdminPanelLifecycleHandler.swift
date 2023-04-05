@@ -16,18 +16,25 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
     public func willBoot(_ app: Application) throws {
         // MARK: Leaf
         app.views.use(.leaf)
-        app.leaf.tags["flashes"] = FlashTag()
+        registerLeafTags(app)
         
         // MARK: Commands
 //        app.commands.use(AdminPanelUserSeedCommand(), as: "adminpanel:user-seeder")
         
+        // MARK: Middleware
         app.middleware.use(FlashMiddleware())
         app.middleware.use(ShouldResetPasswordMiddleware(
             path: "\(config.endpoints.adminPanelUserBasePath)/\(config.endpoints.meSlug)/\(config.endpoints.editSlug)"
         ))
+
+        // MARK: Sessions
+        app.sessions.use(.fluent)
         app.middleware.use(app.sessions.middleware)
         app.middleware.use(AdminPanelUser.asyncSessionAuthenticator())
+        app.migrations.add(SessionRecord.migration)
+        
         try registerRoutes(app)
+
     }
     
     func registerRoutes(_ app: Application) throws {
@@ -48,6 +55,14 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
         
         let resetController = ResetController()
         try usersSessionedRoutes.register(collection: resetController)
+    }
+    
+    func registerLeafTags(_ app: Application) {
+        app.leaf.tags["adminPanel:flashes"] = FlashTag()
+        app.leaf.tags["adminPanel:avatarURL"] = AvatarURLTag()
+        app.leaf.tags["adminPanel:config"] = AdminPanelConfigTag()
+        app.leaf.tags["adminPanel:user"] = CurrentUserTag()
+        app.leaf.tags["adminPanel:hasRequiredRole"] = HasRequiredRole()
     }
 }
 

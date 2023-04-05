@@ -21,6 +21,7 @@ extension Application {
             }
             nonmutating set {
                 self.app.storage.set(ConfigKey.self, to: newValue)
+                self.app.lifecycle.use(AdminPanelLifecycleHandler(config: newValue))
             }
         }
         
