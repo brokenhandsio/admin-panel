@@ -1,0 +1,8 @@
+#extend("AdminPanel/Layout/base"):
+    #export("pageTitle"):
+        Dashboard
+    #endexport
+    #export("content"):
+        <blockquote>Hello, world!</blockquote>
+    #endexport
+#endextend

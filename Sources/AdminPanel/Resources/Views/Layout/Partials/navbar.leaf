@@ -1,5 +1,10 @@
 <nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0">
-    #embed("AdminPanel/Layout/Partials/sitetitle")
+    <a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/admin">
+        #adminPanel:config("name")
+        #if(adminPanel:config("environment") != "production"):
+            <span class="badge badge-primary">#adminPanel:config("environment")</span>
+        #endif
+    </a>
 
     <div class="dropdown mb-1">
         <button class="btn btn-dark btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">

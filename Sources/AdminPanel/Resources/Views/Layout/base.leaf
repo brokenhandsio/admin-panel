@@ -15,11 +15,11 @@
         <!-- Dashboard -->
         <link href="/AdminPanel/css/dashboard.css" rel="stylesheet">
 
-        #get(styles)
+        #import(styles)
     </head>
 
     <body>
-        #embed("AdminPanel/Layout/Partials/content")
+        #import("AdminPanel/Layout/Partials/content")
         
         <!-- jQuery -->
         <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
@@ -59,6 +59,6 @@
             });
         </script>
 
-        #get(javascript)
+        #import(javascript)
     </body>
 </html>

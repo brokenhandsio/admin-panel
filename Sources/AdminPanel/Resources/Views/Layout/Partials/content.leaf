@@ -1,0 +1,22 @@
+#import("body")
+#extend("AdminPanel/Layout/Partials/navbar")
+  <div class="container-fluid">
+    <div class="row">
+
+      <!-- #embed(adminPanel:config("sidebarMenuPath")) -->
+
+      <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+        #extend("AdminPanel/Layout/Partials/alerts")
+        <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+          <h1 class="h2">#import(pageTitle)</h1>
+
+          #extend("AdminPanel/Layout/Partials/breadcrumb")
+
+        </div>
+
+        #import(content)
+
+      </main>
+
+    </div>
+  </div>

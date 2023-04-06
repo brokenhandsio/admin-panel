@@ -21,7 +21,8 @@ let package = Package(
     ],
     targets: [
         .target(
-            name: "AdminPanel", dependencies: [
+            name: "AdminPanel", 
+            dependencies: [
                 .product(name: "Flash", package: "flash"),
                 .product(name: "Fluent", package: "fluent"),
                 .product(name: "FluentMySQLDriver", package: "fluent-mysql-driver"),
@@ -30,7 +31,11 @@ let package = Package(
                 .product(name: "Submissions", package: "submissions"),
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "JWT", package: "jwt")
-            ]),
+            ],
+            resources: [
+                .process("Resources/Views/"),
+            ]
+        ),
         .testTarget(
             name: "AdminPanelTests",
             dependencies: [.target(name: "AdminPanel")]),

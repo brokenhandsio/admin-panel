@@ -1,0 +1,9 @@
+#adminPanel:sidebar:heading() { Admin }
+<ul class="nav flex-column mb-2">
+    <li class="nav-item">
+        <a class="nav-link" href="/admin/users">
+            <span data-feather="users"></span>
+            Admin Panel Users <span class='sr-only'>(current)</span>
+        </a>
+    </li>
+</ul>
