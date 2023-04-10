@@ -1,4 +1,4 @@
-#extend("AdminPanel/Layout/base"):
+#extend("Layout/base"):
     #export("styles"):
         <link href="/AdminPanel/css/login.css" rel="stylesheet">
     #endexport
@@ -9,10 +9,10 @@
 
     #export("body"):
         <form class="form-signin" method="POST">
-            <h1>#adminPanel:config("name")</h1>
+            <h1>#(adminPanelConfig("name"))</h1>
             <h4>Please sign in</h4>
 
-            #extend("AdminPanel/Layout/Partials/alerts")
+            #extend("Layout/Partials/alerts")
 
             <div class="form-group">
                 <label for="email">Email address</label>
@@ -30,5 +30,4 @@
 
         </form>
     #endexport
-
 #endextend

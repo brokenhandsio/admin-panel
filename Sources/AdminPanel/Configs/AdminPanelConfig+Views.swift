@@ -1,6 +1,6 @@
 extension AdminPanelConfig {
     public struct Views {
-        public static let prefix = "AdminPanel"
+        public static let prefix = ""
         
         public struct Login {
             public let index: String
@@ -8,7 +8,7 @@ extension AdminPanelConfig {
             public let resetPassword: String
             
             public init(
-                index: String = prefix + "/Login/index",
+                index: String = prefix + "/Login/login",
                 requestResetPassword: String = prefix + "/Login/request-reset-password",
                 resetPassword: String = prefix + "/Login/reset-password"
             ) {
@@ -21,7 +21,7 @@ extension AdminPanelConfig {
         public struct Dashboard {
             public let index: String
             
-            public init(index: String = prefix + "/Dashboard/index") {
+            public init(index: String = prefix + "/Dashboard/dashboard") {
                 self.index = index
             }
         }
@@ -31,7 +31,7 @@ extension AdminPanelConfig {
             public let editAndCreate: String
             
             public init(
-                index: String = prefix + "/AdminPanelUser/index",
+                index: String = prefix + "/AdminPanelUser/users",
                 editAndCreate: String = prefix + "/AdminPanelUser/edit"
             ) {
                 self.index = index

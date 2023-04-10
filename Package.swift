@@ -33,7 +33,8 @@ let package = Package(
                 .product(name: "JWT", package: "jwt")
             ],
             resources: [
-                .process("Resources/Views/"),
+                .copy("Views/"),
+                .copy("Public/"),
             ]
         ),
         .testTarget(
