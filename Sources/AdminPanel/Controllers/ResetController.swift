@@ -14,12 +14,10 @@ protocol ResetControllerType: RouteCollection {
 
 final class ResetController: ResetControllerType {
     func boot(routes: RoutesBuilder) throws {
-        let resetPasswordRoutes = routes
-            .grouped("users", "reset-password")
-        resetPasswordRoutes.get("request", use: requestPasswordResetHandler)
-        resetPasswordRoutes.post("request", use: requestPasswordResetPostHandler)
-        resetPasswordRoutes.get(use: resetPasswordHandler)
-        resetPasswordRoutes.post(use: resetPasswordPostHandler)
+        routes.get("request", use: requestPasswordResetHandler)
+        routes.post("request", use: requestPasswordResetPostHandler)
+        routes.get(use: resetPasswordHandler)
+        routes.post(use: resetPasswordPostHandler)
     }
     
     func requestPasswordResetHandler(_ req: Request) async throws -> View {

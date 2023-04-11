@@ -41,22 +41,20 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
     
     func registerRoutes(_ app: Application) throws {
         let adminPanelRoutes = app.routes.grouped("admin")
+        let sessionedRoutes = adminPanelRoutes.grouped(
+            AdminPanelUser.asyncSessionAuthenticator()
+        )
+        try sessionedRoutes.register(collection: LoginController())
+        try sessionedRoutes.register(collection: DashboardController())
         
-        let loginController = LoginController()
-        try adminPanelRoutes.register(collection: loginController)
-        
-        let sessionedRoutes = adminPanelRoutes.grouped(AdminPanelUser.asyncSessionAuthenticator())
-        
-        let dashboardController = DashboardController()
-        try sessionedRoutes.register(collection: dashboardController)
-        
-        let usersSessionedRoutes = sessionedRoutes.grouped("users")
-        
-        let adminPanelUserController = AdminPanelUserController()
-        try usersSessionedRoutes.register(collection: adminPanelUserController)
-        
-        let resetController = ResetController()
-        try usersSessionedRoutes.register(collection: resetController)
+        let usersRoutes = sessionedRoutes.grouped("users")
+        let resetPasswordRoutes = usersRoutes.grouped("reset-password")
+        try resetPasswordRoutes.register(collection: ResetController())
+
+        let protectedRoutes = usersRoutes.grouped(
+            AdminPanelUser.redirectMiddleware(path: "/login")
+        )
+        try protectedRoutes.register(collection: AdminPanelUserController())
     }
     
     func registerLeafTags(_ app: Application) {

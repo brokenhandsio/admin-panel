@@ -11,15 +11,12 @@ public protocol LoginControllerType: RouteCollection {
 
 public final class LoginController: LoginControllerType {
     public func boot(routes: RoutesBuilder) throws {
-        let adminAuthSessionRoutes = routes
-            .grouped(AdminPanelUser.asyncSessionAuthenticator())
-        adminAuthSessionRoutes.get("login", use: loginHandler)
-        adminAuthSessionRoutes.get("logout", use: logoutHandler)
-
-        let credentialsAuthRoutes = adminAuthSessionRoutes.grouped(
+        routes.get("login", use: loginHandler)
+        let credentialsAuthRoutes = routes.grouped(
             AdminPanelUser.asyncCredentialsAuthenticator()
         )
         credentialsAuthRoutes.post("login", use: loginPostHandler)
+        routes.get("logout", use: logoutHandler)
     }
 
     // MARK: Login
@@ -37,7 +34,6 @@ public final class LoginController: LoginControllerType {
     }
 
     public func loginHandler(_ req: Request) async throws -> View {
-        let endpoints = req.adminPanel.config.endpoints
         if req.auth.has(AdminPanelUser.self) {
             return try await req.leaf.render(req.adminPanel.config.endpoints.dashboard)
         } else {
