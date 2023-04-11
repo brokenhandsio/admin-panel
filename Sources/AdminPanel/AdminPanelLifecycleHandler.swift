@@ -3,6 +3,7 @@ import Flash
 import Fluent
 import JWT
 import Leaf
+import LeafKit
 import Submissions
 import Vapor
 
@@ -32,9 +33,10 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
         app.middleware.use(app.sessions.middleware)
         app.middleware.use(AdminPanelUser.asyncSessionAuthenticator())
         app.migrations.add(SessionRecord.migration)
+
+        app.migrations.add(CreateAdminPanelUser())
         
         try registerRoutes(app)
-
     }
     
     func registerRoutes(_ app: Application) throws {
@@ -58,11 +60,11 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
     }
     
     func registerLeafTags(_ app: Application) {
-        app.leaf.tags["adminPanel:flashes"] = FlashTag()
-        app.leaf.tags["adminPanel:avatarURL"] = AvatarURLTag()
-        app.leaf.tags["adminPanel:config"] = AdminPanelConfigTag()
-        app.leaf.tags["adminPanel:user"] = CurrentUserTag()
-        app.leaf.tags["adminPanel:hasRequiredRole"] = HasRequiredRole()
+        app.leaf.tags["adminPanelFlashes"] = FlashTag()
+        app.leaf.tags["adminPanelAvatarURL"] = AvatarURLTag()
+        app.leaf.tags["adminPanelConfig"] = AdminPanelConfigTag()
+        app.leaf.tags["adminPanelUser"] = CurrentUserTag()
+        app.leaf.tags["adminPanelHasRequiredRole"] = HasRequiredRole()
     }
 }
 
