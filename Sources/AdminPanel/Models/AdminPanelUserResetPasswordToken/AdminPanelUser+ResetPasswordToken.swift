@@ -2,7 +2,6 @@ import Foundation
 
 extension AdminPanelUser {
     func generateResetPasswordToken(context: AdminPanelUser.ResetPasswordContext) throws -> ResetPasswordToken {
-        let tokenString = ResetPasswordToken.generateTokenString()
         let expiration = AdminPanelUser.ResetPasswordContext.expirationPeriod(
             for: .userRequestedToResetPassword
         )

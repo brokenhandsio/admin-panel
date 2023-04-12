@@ -23,21 +23,22 @@ public final class LoginController: LoginControllerType {
 
     public func loginPostHandler(_ req: Request) async throws -> Response {
         let endpoints = req.adminPanel.config.endpoints
-        if let user = req.auth.get(AdminPanelUser.self) {
-            try await user.generateToken().save(on: req.db)
-            return req.redirect(to: endpoints.dashboard)
-                .flash(.success, "Logged in as \(user.email)")
-        } else {
+        guard let user = req.auth.get(AdminPanelUser.self) else {
             return req.redirect(to: endpoints.login)
-                .flash(.error, "Ivalid email and/or password")
+                .flash(.error, "Invalid email and/or password")
         }
+        req.session.authenticate(user)
+        return req.redirect(to: endpoints.dashboard)
+            .flash(.success, "Logged in as \(user.email)")
     }
 
     public func loginHandler(_ req: Request) async throws -> View {
         if req.auth.has(AdminPanelUser.self) {
             return try await req.leaf.render(req.adminPanel.config.endpoints.dashboard)
         } else {
-            return try await req.leaf.render(
+            return try await req
+            .flash(.error, "Please log in")
+            .leaf.render(
                 req.adminPanel.config.views.login.index,
                 RenderLogin(queryString: req.url.query)
             )
