@@ -7,6 +7,8 @@ public protocol RoleType: LosslessStringConvertible, Comparable, Codable {
 
 extension AdminPanelUser {
     public enum Role: String {
+        static let schema = "admin_panel_user_role"
+        
         case superAdmin
         case admin
         case user
