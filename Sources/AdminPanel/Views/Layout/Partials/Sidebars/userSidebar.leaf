@@ -1,6 +1,2 @@
-#set("sidebarContent") {
-    #embed("AdminPanel/Layout/Partials/Sidebars/Menus/shared")
-    #embed("AdminPanel/Layout/Partials/Sidebars/Menus/user")
-}
-
-#embed("AdminPanel/Layout/Partials/Sidebars/base")
+#extend("Layout/Partials/Sidebars/Menus/sharedMenu")
+#extend("Layout/Partials/Sidebars/Menus/userMenu")
