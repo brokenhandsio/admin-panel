@@ -1,8 +1,25 @@
-#extend("AdminPanel/Layout/base"):
+#extend("Layout/base"):
     #export("pageTitle"):
         Dashboard
     #endexport
-    #export("content"):
-        <blockquote>Hello, world!</blockquote>
+
+    #export("styles"):
+        <link rel="stylesheet" href="/css/dashboard.css">
+    #endexport
+
+    #export("body"):
+        <div class="container-fluid">
+            <div class="row">
+                #extend("Layout/Partials/Sidebars/genericSidebar")
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                    #extend("Layout/Partials/alerts")
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                        <h1 class="h2">Dashboard</h1>
+                        #extend("Layout/Partials/breadcrumb")
+                    </div>
+                    <blockquote>Hello, world!</blockquote>
+                </main>
+            </div>
+        </div>
     #endexport
 #endextend
