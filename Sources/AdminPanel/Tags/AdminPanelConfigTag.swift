@@ -15,7 +15,7 @@ public struct AdminPanelConfigTag: LeafTag {
         
         return try config.viewData(
             for: ctx.parameters[0],
-            user: ctx.request?.auth.get(AdminPanelUser.self),
+            user: user,
             ctx: ctx
         )
     }
@@ -24,6 +24,7 @@ public struct AdminPanelConfigTag: LeafTag {
 public struct AdminPanelConfigTagData {
     enum Keys: String {
         case name
+        case role
         case baseURL
         case sidebarMenuPath
         case dashboardPath
@@ -62,6 +63,8 @@ public struct AdminPanelConfigTagData {
         switch parsedKey {
         case .name:
             return .string(name)
+        case .role:
+            return .string(user?.role?.rawValue ?? "")
         case .baseURL:
             return .string(baseURL)
         case .sidebarMenuPath:

@@ -1,4 +1,4 @@
-import LeafKit
+import Leaf
 
 public struct AvatarURLTag: LeafTag {
     public func render(_ ctx: LeafContext) throws -> LeafData {

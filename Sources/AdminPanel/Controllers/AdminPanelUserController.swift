@@ -29,11 +29,12 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
     // MARK: List
     
     public func listHandler(_ req: Request) async throws -> View {
-        let users = try await AdminPanelUser.query(on: req.db).paginate(for: req)
+        // TODO: Paginate users
+        let users = try await AdminPanelUser.query(on: req.db).all()
         
         return try await req.leaf.render(
             req.adminPanel.config.views.adminPanelUser.index,
-            users
+            ["users": users]
         )
     }
     
@@ -136,7 +137,7 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
         guard
             let userRole = user.role,
             let adminUserRole = adminPanelUser.role,
-            userRole < adminUserRole else {
+            userRole <= adminUserRole else {
             throw Abort(.badRequest, reason: "A user may not edit a user of a higher role")
         }
         

@@ -31,7 +31,7 @@ final class ResetController: ResetControllerType {
             .filter(\.$email == email)
             .first()
         else {
-            throw Abort(.notFound)
+            throw Abort(.notFound, reason: "The email address is not registered")
         }
         
         // Creates a token with an expiration to be sent in the reset password url

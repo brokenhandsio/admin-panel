@@ -52,7 +52,7 @@ public final class AdminPanelUser: Model {
         password: String,
         passwordChangeCount: Int = 0,
         shouldResetPassword: Bool = false
-    ) throws {
+    ) {
         self.id = id
         self.email = email
         self.name = name
