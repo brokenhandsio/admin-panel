@@ -13,7 +13,7 @@ public final class LoginController: LoginControllerType {
     public func boot(routes: RoutesBuilder) throws {
         routes.get("login", use: loginHandler)
         let credentialsAuthRoutes = routes.grouped(
-            AdminPanelUser.asyncCredentialsAuthenticator()
+            AdminPanelUser.CredentialsAuthenticatior()
         )
         credentialsAuthRoutes.post("login", use: loginPostHandler)
         routes.get("logout", use: logoutHandler)
@@ -23,6 +23,7 @@ public final class LoginController: LoginControllerType {
 
     public func loginPostHandler(_ req: Request) async throws -> Response {
         let endpoints = req.adminPanel.config.endpoints
+        try req.auth.require(AdminPanelUser.self)
         guard let user = req.auth.get(AdminPanelUser.self) else {
             return req.redirect(to: endpoints.login)
                 .flash(.error, "Invalid email and/or password")

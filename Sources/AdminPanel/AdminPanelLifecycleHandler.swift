@@ -31,10 +31,10 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
         // MARK: Sessions
         app.sessions.use(.fluent)
         app.middleware.use(app.sessions.middleware)
-        app.middleware.use(AdminPanelUser.asyncSessionAuthenticator())
         app.migrations.add(SessionRecord.migration)
 
         app.migrations.add(CreateAdminPanelUser())
+        app.migrations.add(SeedAdminPanelUser())
         
         try registerRoutes(app)
     }
@@ -52,7 +52,7 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
         try resetPasswordRoutes.register(collection: ResetController())
 
         let protectedRoutes = usersRoutes.grouped(
-            AdminPanelUser.redirectMiddleware(path: "/login")
+            AdminPanelUser.redirectMiddleware(path: app.adminPanel.config.endpoints.login)
         )
         try protectedRoutes.register(collection: AdminPanelUserController())
     }
