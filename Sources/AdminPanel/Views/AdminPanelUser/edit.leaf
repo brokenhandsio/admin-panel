@@ -1,97 +1,149 @@
-#set("pageTitle") { 
-    #if(user) { Edit '#(user.name)' } else { Create Admin Panel User }
-}
+#extend("Layout/base"):
+    #export("pageTitle"):
+        #if(user): 
+            Edit '#(user.name)' 
+        #else: 
+            Create Admin Panel User
+        #endif
+    #endexport
+    #export("body"):
+         <div class="container-fluid">
+            <div class="row">
+                #extend("Layout/Partials/Sidebars/genericSidebar")
+                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                    <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
+                    <h2 class="h2">
+                        #if(user): 
+                            Edit '#(user.name)'
+                        #else:
+                            Create Admin Panel User
+                        #endif
+                    </h2>
+                        <div class="btn-toolbar mb-2 mb-md-0">
+                            <nav aria-label="breadcrumb">
+                                <ol class="breadcrumb">
+                                    <li class="breadcrumb-item"><a href="/admin/users">Admin Panel Users</a></li>
+                                    <li class="breadcrumb-item active" aria-current="page">
+                                        #if(user): 
+                                            Edit
+                                        #else: 
+                                            Create
+                                        #endif
+                                    </li>
+                                </ol>
+                            </nav>
+                        </div>
+                    </div>
+                    <form method="post" #if(user == nil): action="/admin/users/create" #endif>
+                        <h4>User details</h4>
 
-#set("breadcrumb") { 
-    <nav aria-label="breadcrumb">
-      <ol class="breadcrumb">
-        <li class="breadcrumb-item"><a href="/admin/users">Admin Panel Users</a></li>
-        <li class="breadcrumb-item active" aria-current="page">
-            #if(user) { Edit } else { Create }
-        </li>
-      </ol>
-    </nav>
-}
+                        <div class="form-group">
+                            <label class="form-label" for="name">Name</label>
+                            #bsInput("text", "", "id='name' name='name' placeholder='Enter name'")
+                        </div>
 
-#set("content") {
-    #if(user) {
-        <form method="post">
-    } else {
-        <form method="post" action="/admin/users/create">
-    }
-        <h4>User details</h4>
+                        <div class="form-group">
+                            <label class="form-label" for="name">Title</label>
+                            #bsInput("text", "", "id='title' name='title' placeholder='Enter title'")
+                        </div>
 
-        #submissions:text("name", "Enter name")
-        #submissions:text("title", "Enter title")
-        #submissions:email("email", "Enter email")
+                        <div class="form-group">
+                            <label class="form-label" for="name">Email</label>
+                            #bsInput("email", "", "id='email' name='email' placeholder='Enter email'")
+                        </div>
 
-        <div class="form-group">
-            <label for="role">Role</label>
-            <select class="form-control" name="role" id="role">
-                  <option value="superAdmin" #if(user.role == "superAdmin") { selected }>Super Admin</option>
-                  <option value="admin" #if(user.role == "admin") { selected }>Admin</option>
-                  <option value="user" #if(user.role == "user") { selected }>User</option>
-            </select>
-        </div>
+                        <div class="form-group">
+                            <label for="role">Role</label>
+                            <select class="form-control" name="role" id="role">
+                                <option value="superAdmin" #if(user.role == "superAdmin"): selected #endif>Super Admin</option>
+                                <option value="admin" #if(user.role == "admin"): selected #endif>Admin</option>
+                                <option value="user" #if(user.role == "user"): selected #endif>User</option>
+                            </select>
+                        </div>
 
-        <hr>
+                        <hr>
 
-        <h4>Choose password</h4>
+                        <h4>Choose password</h4>
+                        #if(user == nil):
+                            <p>If you don't specify a password, then the user will receive an email with instructions on how to set one. If you specify a password, then no email will be sent to the new user.</p>
 
-        #if(user == nil) {
-            <p>If you don't specify a password, then the user will receive an email with instructions on how to set one. If you specify a password, then no email will be sent to the new user.</p>
+                            <!-- The 'form-check-input' extra class can be removed once we upgrade to BS 5 -->
+                            <div class="form-group form-check">
+                                #bsCheckbox("form-check-input", "id='shouldSpecifyPassword' placeholder='Specify password'")
+                                <label class="form-check-label" for="shouldSpecifyPassword">Specify password</label>
+                                <small id="shouldSpecifyPasswordHelp" class="form-text text-muted">Leave this out and the user will have to specify one themselves.</small>
+                            </div>
 
-            #submissions:checkbox("shouldSpecifyPassword", "Specify password", "Leave this out and the user will have to specify one themselves.")
+                            <div id="specifyPassword" style="display:none;">
+                                <div class="form-group">
+                                    #bsInput("password", "Password", "id='password' name='password' placeholder='Enter password' required")
+                                    <label class="form-check-label" for="password">Password</label>
+                                    <small id="passwordHelp" class="form-text text-muted">Minimum 8 characters and needs to satisfy three of the following: has a lowercase character, has an uppercase character, has a digit or has a special character.</small>
+                                </div>
 
-            <div id="specifyPassword" style="display:none;">
-                #submissions:password("password", "Enter password", "Minimum 8 characters and needs to satisfy three of the following: has a lowercase character, has an uppercase character, has a digit or has a special character.")
-                #submissions:password("passwordAgain", "Enter password again")
+                                <div class="form-group">
+                                    <label class="form-label" for="passwordAgain">Password again</label>
+                                    #bsInput("password", "Password again", "id='passwordAgain' name='passwordAgain' placeholder='Enter password again' required")
+                                </div>
+                            </div>
+
+                            <div class="form-group form-check">
+                                #bsCheckbox("form-check-input", "id='shouldResetPassword' placeholder='Should reset password'")
+                                <label class="form-check-label" for="shouldResetPassword">Should reset password</label>
+                                <small id="shouldResetPasswordHelp" class="form-text text-muted">This will require the user to set a new password after logging in the first time.</small>
+                            </div>
+                        #else:
+                            <div class="form-group">
+                                <label class="form-label" for="password">Password</label>
+                                #bsInput("password", "Password", "id='password' name='password' placeholder='Enter password' required")
+                                <small id="passwordHelp" class="form-text text-muted">Minimum 8 characters.</small>
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label" for="passwordAgain">Password again</label>
+                                #bsInput("password", "Password again", "id='passwordAgain' name='passwordAgain' placeholder='Enter password again' required")
+                            </div>
+                        #endif
+                
+                        <button type="submit" class="btn btn-primary">Submit</button>
+                        <a href="/admin/users" class="btn btn-secondary">Cancel</a>
+                    </form>
+                </main>
             </div>
+        </div>
+    #endexport
 
-            #submissions:checkbox("shouldResetPassword", "Should reset password", "This will require the user to set a new password after logging in the first time.")
-        } else {
-            #submissions:password("password", "Enter password", "Minimum 8 characters.")
-            #submissions:password("passwordAgain", "Enter password again")
-        }
-  
-        <button type="submit" class="btn btn-primary">Submit</button>
-        <a href="/admin/users" class="btn btn-secondary">Cancel</a>
-    </form>
-}
+    #export("javascript"):
+        <script>
+            // Password verification
+            let password = $("#password").get(0);
+            let passwordAgain = $("#passwordAgain").get(0);
 
-#set("javascript") {
-    <script>
-        // Password verification
-        let password = $("#password").get(0);
-        let passwordAgain = $("#passwordAgain").get(0);
+            function validatePassword(){
+            if(password.value != passwordAgain.value) {
+                passwordAgain.setCustomValidity("Passwords do not match.");
+            \} else {
+                passwordAgain.setCustomValidity('');
+            \}
+            \}
 
-        function validatePassword(){
-          if(password.value != passwordAgain.value) {
-            passwordAgain.setCustomValidity("Passwords do not match.");
-          \} else {
-            passwordAgain.setCustomValidity('');
-          \}
-        \}
+            password.onchange = validatePassword;
+            passwordAgain.onkeyup = validatePassword;
 
-        password.onchange = validatePassword;
-        passwordAgain.onkeyup = validatePassword;
+            // Password toggle
+            $(function () {
+                $("#specifyPassword").toggle($("#shouldSpecifyPassword").prop("checked"));
+                $("#shouldSpecifyPassword").click(function() {
+                    if (!this.checked) {
+                        $("#password").val("");
+                        $("#passwordAgain").val("");
+                    \}
 
-        // Password toggle
-        $(function () {
-            $("#specifyPassword").toggle($("#shouldSpecifyPassword").prop("checked"));
-            $("#shouldSpecifyPassword").click(function() {
-                if (!this.checked) {
-                    $("#password").val("");
-                    $("#passwordAgain").val("");
-                \}
+                    $("#password").prop('required', (this.checked))
+                    $("#passwordAgain").prop('required', (this.checked))
 
-                $("#password").prop('required', (this.checked))
-                $("#passwordAgain").prop('required', (this.checked))
-
-                $("#specifyPassword").toggle();
+                    $("#specifyPassword").toggle();
+                \});
             \});
-        \});
-    </script>
-}
-
-#embed("AdminPanel/Layout/base")
+        </script>
+    #endexport
+#endextend
