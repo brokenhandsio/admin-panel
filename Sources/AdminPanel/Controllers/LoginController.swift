@@ -35,7 +35,7 @@ public final class LoginController: LoginControllerType {
 
     public func loginHandler(_ req: Request) async throws -> View {
         if req.auth.has(AdminPanelUser.self) {
-            return try await req.leaf.render(req.adminPanel.config.endpoints.dashboard)
+            return try await req.leaf.render(req.adminPanel.config.views.dashboard.index)
         } else {
             return try await req
             .flash(.error, "Please log in")

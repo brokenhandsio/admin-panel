@@ -39,11 +39,11 @@ extension AdminPanelUser.Role: RoleType {
     public var menuPath: String {
         switch self {
         case .superAdmin:
-            return "AdminPanel/Layout/Partials/Sidebars/superadmin"
+            return "Layout/Partials/Sidebars/superadminMenu"
         case .admin:
-            return "AdminPanel/Layout/Partials/Sidebars/admin"
+            return "Layout/Partials/Sidebars/adminMenu"
         case .user:
-            return "AdminPanel/Layout/Partials/Sidebars/user"
+            return "Layout/Partials/Sidebars/userMenu"
         }
     }
 
