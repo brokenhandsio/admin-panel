@@ -4,7 +4,6 @@ import Fluent
 import JWT
 import Leaf
 import LeafKit
-import Submissions
 import Vapor
 
 public class AdminPanelLifecycleHandler: LifecycleHandler {
@@ -58,11 +57,13 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
     }
     
     func registerLeafTags(_ app: Application) {
+        app.leaf.useBootstrapTags()
         app.leaf.tags["adminPanelFlashes"] = FlashTag()
         app.leaf.tags["adminPanelAvatarURL"] = AvatarURLTag()
         app.leaf.tags["adminPanelConfig"] = AdminPanelConfigTag()
         app.leaf.tags["adminPanelUser"] = CurrentUserTag()
         app.leaf.tags["adminPanelHasRequiredRole"] = HasRequiredRole()
+        app.leaf.tags["adminPanelSidebarMenuItem"] = SidebarMenuItemTag()
     }
 }
 

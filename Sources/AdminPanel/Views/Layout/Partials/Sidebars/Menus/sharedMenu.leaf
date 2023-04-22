@@ -1,8 +1,5 @@
 <ul class="nav flex-column">
-    <li class="nav-item">
-        <a class="nav-link active" href="/admin/dashboard">
-            <span data-feather="home"></span>
-            Home <span class='sr-only'>(current)</span>
-        </a>
-    </li>
+    #adminPanelSidebarMenuItem("/admin/dashboard", "home", "/admin/dashboard*"): 
+        Home
+    #endadminPanelSidebarMenuItem
 </ul>
