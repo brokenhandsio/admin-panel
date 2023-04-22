@@ -2,10 +2,16 @@ import Leaf
 
 public struct CurrentUserTag: LeafTag {
     public func render(_ ctx: LeafContext) throws -> LeafData {
-        try ctx.requireParameterCount(1)
-
         guard let user = ctx.request?.auth.get(AdminPanelUser.self) else {
-            throw "No user is logged in."
+            return .trueNil
+        }
+        
+        guard ctx.parameters.count > 0 else {
+            return user.leafData
+        }
+        
+        guard ctx.parameters.count == 1 else {
+            throw "Invalid parameter count: \(ctx.parameters.count)/1"
         }
         
         guard
