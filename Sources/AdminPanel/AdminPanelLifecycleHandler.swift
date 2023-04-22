@@ -64,6 +64,7 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
         app.leaf.tags["adminPanelUser"] = CurrentUserTag()
         app.leaf.tags["adminPanelHasRequiredRole"] = HasRequiredRole()
         app.leaf.tags["adminPanelSidebarMenuItem"] = SidebarMenuItemTag()
+        app.leaf.tags["adminPanelSidebarHeading"] = SidebarHeadingTag()
     }
 }
 
