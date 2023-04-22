@@ -1,7 +1,7 @@
 <div class="form-group" data-edit="quill">
-    #if(label) {
+    #if(label):
         <label for="#(key)">#(label)</label>
-    }
+    #endif
 
     <div class="toolbar">
         <span class="ql-formats">
@@ -33,18 +33,18 @@
     </div>
 
     <input class="editor-placeholder" type="hidden" value="#(placeholder)">
-    <div class="editor form-control #if(hasErrors) { is-invalid }">#get(value)</div>
+    <div class="editor form-control #if(hasErrors): is-invalid #endif">#(value)</div>
     <input id="#(key)" name="#(key)" class="wysiwyg-value" type="hidden" value="#(value)">
 
-    #if(helpText) {
+    #if(helpText):
         <small id="#(key)Help" class="form-text text-muted">#(helpText)</small>
-    }
+    #endif
 
-    #if(hasErrors) {
+    #if(hasErrors):
         <div class='invalid-feedback'>
-            #for(error in errors) {
+            #for(error in errors):
                 <div>#(error)</div>
-            }
+            #endfor
         </div>
-    }
+    #endif
 </div>
