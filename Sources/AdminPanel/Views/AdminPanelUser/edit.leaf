@@ -76,8 +76,8 @@
 
                             <div id="specifyPassword" style="display:none;">
                                 <div class="form-group">
-                                    #bsInput("password", "Password", "id='password' name='password' placeholder='Enter password' required")
                                     <label class="form-check-label" for="password">Password</label>
+                                    #bsInput("password", "Password", "id='password' name='password' placeholder='Enter password' required")
                                     <small id="passwordHelp" class="form-text text-muted">Minimum 8 characters and needs to satisfy three of the following: has a lowercase character, has an uppercase character, has a digit or has a special character.</small>
                                 </div>
 
@@ -118,13 +118,13 @@
             let password = $("#password").get(0);
             let passwordAgain = $("#passwordAgain").get(0);
 
-            function validatePassword(){
-            if(password.value != passwordAgain.value) {
-                passwordAgain.setCustomValidity("Passwords do not match.");
-            \} else {
-                passwordAgain.setCustomValidity('');
-            \}
-            \}
+            function validatePassword() {
+                if(password.value != passwordAgain.value) {
+                    passwordAgain.setCustomValidity("Passwords do not match.");
+                } else {
+                    passwordAgain.setCustomValidity('');
+                }
+            }
 
             password.onchange = validatePassword;
             passwordAgain.onkeyup = validatePassword;
@@ -136,14 +136,14 @@
                     if (!this.checked) {
                         $("#password").val("");
                         $("#passwordAgain").val("");
-                    \}
+                    }
 
                     $("#password").prop('required', (this.checked))
                     $("#passwordAgain").prop('required', (this.checked))
 
                     $("#specifyPassword").toggle();
-                \});
-            \});
+                });
+            });
         </script>
     #endexport
 #endextend
