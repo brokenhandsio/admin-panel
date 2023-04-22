@@ -1,5 +1,4 @@
 import Mailgun
-import Submissions
 import Vapor
 
 extension AdminPanelUser {

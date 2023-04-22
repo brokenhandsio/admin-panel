@@ -2,7 +2,6 @@ import Flash
 import Fluent
 import Leaf
 import Mailgun
-import Submissions
 import Vapor
 
 protocol ResetControllerType: RouteCollection {

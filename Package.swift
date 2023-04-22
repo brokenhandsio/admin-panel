@@ -11,13 +11,13 @@ let package = Package(
     ],
     dependencies: [
         .package(url: "https://github.com/nodes-vapor/flash.git", branch: "master"),
-        .package(url: "https://github.com/nodes-vapor/submissions.git", from: "3.0.0-rc.6"),
         .package(url: "https://github.com/vapor-community/mailgun.git", from: "5.0.0"),
         .package(url: "https://github.com/vapor/fluent-mysql-driver.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/fluent.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/leaf.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/jwt.git", from: "4.0.0"),
+        .package(url: "https://github.com/brokenhandsio/bootstrap.git", from: "1.0.0-beta")
     ],
     targets: [
         .target(
@@ -28,9 +28,9 @@ let package = Package(
                 .product(name: "FluentMySQLDriver", package: "fluent-mysql-driver"),
                 .product(name: "Leaf", package: "leaf"),
                 .product(name: "Mailgun", package: "mailgun"),
-                .product(name: "Submissions", package: "submissions"),
                 .product(name: "Vapor", package: "vapor"),
-                .product(name: "JWT", package: "jwt")
+                .product(name: "JWT", package: "jwt"),
+                .product(name: "Bootstrap", package: "bootstrap")
             ],
             resources: [
                 .copy("Views/"),
@@ -39,6 +39,7 @@ let package = Package(
         ),
         .testTarget(
             name: "AdminPanelTests",
-            dependencies: [.target(name: "AdminPanel")]),
+            dependencies: [.target(name: "AdminPanel")]
+        ),
     ]
 )

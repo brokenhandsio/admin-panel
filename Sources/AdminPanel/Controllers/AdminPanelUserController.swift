@@ -1,6 +1,5 @@
 import Fluent
 import Leaf
-import Submissions
 import Vapor
 
 public protocol AdminPanelUserControllerType: RouteCollection {
