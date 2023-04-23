@@ -11,7 +11,7 @@ extension ValidatorResults.StrongPassword: ValidatorResult {
     var isFailure: Bool {
         !isStrongPassword
     }
-
+    
     var successDescription: String? {
         "is a strong password"
     }
@@ -23,36 +23,44 @@ extension ValidatorResults.StrongPassword: ValidatorResult {
 
 extension Validator where T == String {
     private static var strongPasswordRegex = Regex {
-        Anchor.startOfSubject
         Lookahead {
             Regex {
-                OneOrMore(.any)
-                "A"..."Z"
+                ZeroOrMore(.any)
+                ("a"..."z")
             }
         }
         Lookahead {
             Regex {
                 ZeroOrMore(.any)
-                One(.digit)
+                ("A"..."Z")
             }
         }
         Lookahead {
-            Regex {
-                ZeroOrMore(.any)
-                One(.anyOf("@$!%*#?&"))
+            ChoiceOf {
+                Regex {
+                    ZeroOrMore(.any)
+                    One(.digit)
+                }
+                CharacterClass(
+                    // TODO: Atom characterClass(_StringProcessing.DSLTree.Atom.CharacterClass.digit)
+                    ("a"..."z"),
+                    ("A"..."Z")
+                )
+                .inverted
             }
         }
-        Repeat(8...) {
-            CharacterClass(
-                .anyOf("@$!%*#?&"),
-                ("A"..."Z"),
-                ("a"..."z"),
-                .digit
-            )
+        Capture {
+            Repeat(8...) {
+                CharacterClass(
+                    .anyOf("@$!%*#?&"),
+                    ("A"..."Z"),
+                    ("a"..."z"),
+                    .digit
+                )
+            }
         }
-        Anchor.endOfSubject
-    }
-
+    }.anchorsMatchLineEndings()
+    
     public static var strongPassword: Validator<T> {
         .init { data -> ValidatorResult in
             guard data.contains(strongPasswordRegex) else {
