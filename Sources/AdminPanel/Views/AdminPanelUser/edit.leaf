@@ -76,31 +76,31 @@
 
                             <div id="specifyPassword" style="display:none;">
                                 <div class="form-group">
-                                    <label class="form-check-label" for="password">Password</label>
-                                    #bsInput("password", "Password", "id='password' name='password' placeholder='Enter password' required")
+                                    <label class="form-label" for="password">Password</label>
+                                    #bsInput("password", "", "id='password' name='password' placeholder='Enter password' required")
                                     <small id="passwordHelp" class="form-text text-muted">Minimum 8 characters and needs to satisfy three of the following: has a lowercase character, has an uppercase character, has a digit or has a special character.</small>
                                 </div>
 
                                 <div class="form-group">
                                     <label class="form-label" for="passwordAgain">Password again</label>
-                                    #bsInput("password", "Password again", "id='passwordAgain' name='passwordAgain' placeholder='Enter password again' required")
+                                    #bsInput("password", "", "id='passwordAgain' name='passwordAgain' placeholder='Enter password again' required")
                                 </div>
                             </div>
 
                             <div class="form-group form-check">
-                                #bsCheckbox("form-check-input", "id='shouldResetPassword' placeholder='Should reset password'")
+                                #bsCheckbox("form-check-input", "", "id='shouldResetPassword' placeholder='Should reset password'")
                                 <label class="form-check-label" for="shouldResetPassword">Should reset password</label>
                                 <small id="shouldResetPasswordHelp" class="form-text text-muted">This will require the user to set a new password after logging in the first time.</small>
                             </div>
                         #else:
                             <div class="form-group">
                                 <label class="form-label" for="password">Password</label>
-                                #bsInput("password", "Password", "id='password' name='password' placeholder='Enter password' required")
+                                #bsInput("password", "", "id='password' name='password' placeholder='Enter password' required")
                                 <small id="passwordHelp" class="form-text text-muted">Minimum 8 characters.</small>
                             </div>
                             <div class="form-group">
                                 <label class="form-label" for="passwordAgain">Password again</label>
-                                #bsInput("password", "Password again", "id='passwordAgain' name='passwordAgain' placeholder='Enter password again' required")
+                                #bsInput("password", "", "id='passwordAgain' name='passwordAgain' placeholder='Enter password again' required")
                             </div>
                         #endif
                 

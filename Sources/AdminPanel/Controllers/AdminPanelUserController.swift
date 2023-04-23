@@ -23,6 +23,7 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
         routes.post(":userId", "edit", use: editUserPostHandler)
         routes.get("me", "edit", use: editMeHandler)
         routes.post("me", "edit", use: editMePostHandler)
+        routes.post(":userId", "delete", use: deletePostHandler)
     }
     
     // MARK: List
@@ -142,7 +143,7 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
         
         return try await req.leaf.render(
             req.adminPanel.config.views.adminPanelUser.editAndCreate,
-            user
+            ["user": user]
         )
     }
     
