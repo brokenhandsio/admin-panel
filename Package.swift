@@ -17,7 +17,7 @@ let package = Package(
         .package(url: "https://github.com/vapor/leaf.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/vapor.git", from: "4.0.0"),
         .package(url: "https://github.com/vapor/jwt.git", from: "4.0.0"),
-        .package(url: "https://github.com/brokenhandsio/bootstrap.git", from: "1.0.0-beta")
+        .package(url: "https://github.com/brokenhandsio/leaf-bootstrap.git", from: "1.0.0-beta")
     ],
     targets: [
         .target(
@@ -30,7 +30,7 @@ let package = Package(
                 .product(name: "Mailgun", package: "mailgun"),
                 .product(name: "Vapor", package: "vapor"),
                 .product(name: "JWT", package: "jwt"),
-                .product(name: "Bootstrap", package: "bootstrap")
+                .product(name: "LeafBootstrap", package: "leaf-bootstrap")
             ],
             resources: [
                 .copy("Views/"),

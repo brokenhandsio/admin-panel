@@ -1,4 +1,4 @@
-import Bootstrap
+import LeafBootstrap
 import Flash
 import Fluent
 import JWT
@@ -32,7 +32,8 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
         app.middleware.use(app.sessions.middleware)
         app.migrations.add(SessionRecord.migration)
 
-        app.migrations.add(CreateAdminPanelUser())
+        app.migrations.add(AdminPanelUser.CreateMigration())
+        app.migrations.add(ResetPasswordToken.CreateMigration())
         app.migrations.add(SeedAdminPanelUser())
         
         try registerRoutes(app)
