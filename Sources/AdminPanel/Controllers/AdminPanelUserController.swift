@@ -148,14 +148,13 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
     }
     
     private func editPostHandler(_ req: Request, user: AdminPanelUser) async throws -> Response {
-        try AdminPanelUser.Create.validate(content: req)
+        try AdminPanelUser.Update.validate(content: req)
         let config = req.adminPanel.config
         
-        let updatedData = try req.content.decode(AdminPanelUser.Create.self)
-        let updatedUser = try AdminPanelUser(updatedData)
-        updatedUser.id = user.id
-        
-        try await updatedUser.save(on: req.db)
+        let updatedData = try req.content.decode(AdminPanelUser.Update.self)
+        try user.update(with: updatedData)
+                
+        try await user.update(on: req.db)
         
         return req.redirect(to: config.endpoints.adminPanelUserBasePath)
             .flash(
