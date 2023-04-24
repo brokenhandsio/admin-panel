@@ -55,9 +55,9 @@
                         <div class="form-group">
                             <label for="role">Role</label>
                             <select class="form-control" name="role" id="role">
-                                <option value="superAdmin" #if(user.role == "superAdmin"): selected #endif>Super Admin</option>
-                                <option value="admin" #if(user.role == "admin"): selected #endif>Admin</option>
-                                <option value="user" #if(user.role == "user"): selected #endif>User</option>
+                                <option value="superAdmin" #if(adminPanelUser("role") == "superAdmin"): selected #endif>Super Admin</option>
+                                <option value="admin" #if(adminPanelUser("role") == "admin"): selected #endif>Admin</option>
+                                <option value="user" #if(adminPanelUser("role") == "user"): selected #endif>User</option>
                             </select>
                         </div>
 
