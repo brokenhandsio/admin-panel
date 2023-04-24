@@ -68,24 +68,3 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
         app.leaf.tags["adminPanelSidebarHeading"] = SidebarHeadingTag()
     }
 }
-
-//public extension LeafTagConfig {
-//    mutating func useAdminPanelLeafTags<U: AdminPanelUserType>(
-//        _ type: U.Type,
-//        paths: TagTemplatePaths = .init()
-//    ) {
-//        useBootstrapLeafTags()
-//        use([
-//            "adminPanel:avatarURL": AvatarURLTag(),
-//            "adminPanel:config": AdminPanelConfigTag<U>(),
-//            "adminPanel:sidebar:heading": SidebarHeadingTag(),
-//            "adminPanel:sidebar:menuItem": SidebarMenuItemTag(),
-//            "adminPanel:user": CurrentUserTag<U>(),
-//            "adminPanel:user:requireRole": RequireRoleTag<U>(),
-//            "adminPanel:user:hasRequiredRole": HasRequiredRole<U>(),
-//            "number": NumberFormatTag(),
-//            "offsetPaginator": OffsetPaginatorTag(templatePath: "Paginator/offsetpaginator"),
-//            "submissions:WYSIWYG": InputTag(templatePath: paths.wysiwygField)
-//        ])
-//    }
-//}
