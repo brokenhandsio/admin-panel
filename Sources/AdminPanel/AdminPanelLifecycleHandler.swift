@@ -34,7 +34,6 @@ public class AdminPanelLifecycleHandler: LifecycleHandler {
 
         app.migrations.add(AdminPanelUser.CreateMigration())
         app.migrations.add(ResetPasswordToken.CreateMigration())
-        app.migrations.add(SeedAdminPanelUser())
         
         try registerRoutes(app)
     }
