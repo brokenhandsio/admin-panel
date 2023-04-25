@@ -7,7 +7,7 @@ public protocol DashboardControllerType: RouteCollection {
 
 public final class DashboardController: DashboardControllerType {
     public func boot(routes: RoutesBuilder) throws {
-        routes.get("", use: dashboardHandler)
+        routes.get(use: dashboardHandler)
         routes.get("dashboard", use: dashboardHandler)
     }
     
