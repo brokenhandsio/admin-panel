@@ -1,60 +1,52 @@
 import Leaf
-import Sugar
-import TemplateKit
 
-public final class SidebarMenuItemTag: TagRenderer {
-    public func render(tag: TagContext) throws -> Future<TemplateData> {
-        let body = try tag.requireBody()
-        let request = try tag.requireRequest()
-
-        var url = "#"
-        var icon = ""
+public struct SidebarMenuItemTag: UnsafeUnescapedLeafTag {
+    public func render(_ ctx: LeafContext) throws -> LeafData {
+//        let body = try ctx.requireBody()
+        
+        var (url, icon) = try parseParameters(ctx)
+        icon = "<span data-feather='\(icon ?? "")'></span>"
+        
         var activeLink = ""
         var activeTitle = ""
-
-        for index in 0...1 {
-            if
-                let param = tag.parameters[safe: index]?.string,
-                !param.isEmpty
-            {
-                switch index {
-                case 0: url = param
-                case 1: icon = "<span data-feather='\(param)'></span>"
-                default: ()
-                }
-            }
-        }
-
-        if tag.parameters.count > 2 {
-            let currentPath = try request.privateContainer.make(CurrentURLContainer.self).path
-            let activeURLPatterns = tag.parameters.dropFirst(2)
-
+        
+        if ctx.parameters.count > 2 {
+            let currentPath = ctx.request?.url.path ?? ""
+            let activeURLPatterns = ctx.parameters.dropFirst(2)
+            
             if isActive(currentPath: currentPath, pathPatterns: activeURLPatterns) {
                 activeLink = " active"
                 activeTitle = " <span class='sr-only'>(current)</span>"
             }
         }
+        
+        let body = try ctx.getRawTagBody()
 
-        return tag.serializer.serialize(ast: body).map(to: TemplateData.self) { body in
-            let parsedBody = String(data: body.data, encoding: .utf8) ?? ""
+        let item =
+        """
+        <li class="nav-item">
+            <a class="nav-link\(activeLink)" href="\(url)">
+                \(icon ?? "")
+                \(body)\(activeTitle)
+            </a>
+        </li>
+        """
+        
+        return .string(item)
 
-            let item =
-            """
-            <li class="nav-item">
-                <a class="nav-link\(activeLink)" href="\(url)">
-                    \(icon)
-                    \(parsedBody)\(activeTitle)
-                </a>
-            </li>
-            """
 
-            return .string(item)
-        }
+    }
+    
+    private func parseParameters(_ ctx: LeafContext) throws -> (url: String, icon: String?) {
+        let url = try ctx.parse(index: 0, type: "url")
+        let icon = try ctx.parse(index: 1, type: "icon")
+        
+        return (url ?? "#", icon)
     }
 }
 
 private extension SidebarMenuItemTag {
-    func isActive(currentPath: String, pathPatterns: ArraySlice<TemplateData>) -> Bool {
+    func isActive(currentPath: String, pathPatterns: ArraySlice<LeafData>) -> Bool {
         for arg in pathPatterns {
             let searchPath = arg.string ?? ""
 

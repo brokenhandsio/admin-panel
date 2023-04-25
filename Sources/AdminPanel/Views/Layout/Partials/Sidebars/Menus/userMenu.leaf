@@ -1,0 +1,6 @@
+#adminPanelSidebarHeading():
+    User
+#endadminPanelSidebarHeading
+<ul class="nav flex-column mb-2">
+
+</ul>

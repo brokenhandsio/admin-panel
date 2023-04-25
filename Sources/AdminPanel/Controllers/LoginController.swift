@@ -1,57 +1,56 @@
 import Vapor
 import Fluent
 import Leaf
-import Authentication
 import Flash
 
-public protocol LoginControllerType {
-    func login(_ req: Request) throws -> Future<Response>
-    func renderLogin(_ req: Request) throws -> Future<Response>
-    func logout(_ req: Request) throws -> Response
+public protocol LoginControllerType: RouteCollection {
+    func loginHandler(_ req: Request) async throws -> View
+    func loginPostHandler(_ req: Request) async throws -> Response
+    func logoutHandler(_ req: Request) async throws -> Response
 }
 
-public final class LoginController<U: AdminPanelUserType>: LoginControllerType {
-
-    public init() {}
+public final class LoginController: LoginControllerType {
+    public func boot(routes: RoutesBuilder) throws {
+        routes.get("login", use: loginHandler)
+        let credentialsAuthRoutes = routes.grouped(
+            AdminPanelUser.CredentialsAuthenticatior()
+        )
+        credentialsAuthRoutes.post("login", use: loginPostHandler)
+        routes.get("logout", use: logoutHandler)
+    }
 
     // MARK: Login
 
-    public func login(_ req: Request) throws -> Future<Response> {
-        let endpoints = try req.make(AdminPanelConfig<U>.self).endpoints
-        return U
-            .logIn(on: req)
-            .try {
-                try req.authenticate($0)
-            }
-            .map(to: Response.self) { user in
-                req
-                    .redirect(to: endpoints.dashboard)
-                    .flash(.success, "Logged in as \(user[keyPath: U.usernameKey])")
-            }
-            .mapIfError { error in
-                req
-                    .redirect(to: endpoints.login)
-                    .flash(.error, "Invalid username and/or password")
-            }
+    public func loginPostHandler(_ req: Request) async throws -> Response {
+        let endpoints = req.adminPanel.config.endpoints
+        try req.auth.require(AdminPanelUser.self)
+        guard let user = req.auth.get(AdminPanelUser.self) else {
+            return req.redirect(to: endpoints.login)
+                .flash(.error, "Invalid email and/or password")
+        }
+        req.session.authenticate(user)
+        return req.redirect(to: endpoints.dashboard)
+            .flash(.success, "Logged in as \(user.email)")
     }
 
-    public func renderLogin(_ req: Request) throws -> Future<Response> {
-        let config: AdminPanelConfig<U> = try req.make()
-        guard try !req.isAuthenticated(U.self) else {
-            return req.future(req.redirect(to: config.endpoints.dashboard))
+    public func loginHandler(_ req: Request) async throws -> View {
+        if req.auth.has(AdminPanelUser.self) {
+            return try await req.leaf.render(req.adminPanel.config.views.dashboard.index)
+        } else {
+            return try await req
+            .flash(.error, "Please log in")
+            .leaf.render(
+                req.adminPanel.config.views.login.index,
+                RenderLogin(queryString: req.url.query)
+            )
         }
-
-        return try req
-            .view()
-            .render(config.views.login.index, RenderLogin(queryString: req.http.url.query), on: req)
-            .encode(for: req)
     }
 
     // MARK: Log out
 
-    public func logout(_ req: Request) throws -> Response {
-        let endpoints = try req.make(AdminPanelConfig<U>.self).endpoints
-        try req.unauthenticateSession(U.self)
+    public func logoutHandler(_ req: Request) async throws -> Response {
+        let endpoints = req.adminPanel.config.endpoints
+        req.auth.logout(AdminPanelUser.self)
         return req.redirect(to: endpoints.login).flash(.success, "Logged out")
     }
 }

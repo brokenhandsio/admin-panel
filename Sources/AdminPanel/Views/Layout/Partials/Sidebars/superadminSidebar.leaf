@@ -1,0 +1,4 @@
+#extend("Layout/Partials/Sidebars/Menus/sharedMenu")
+#extend("Layout/Partials/Sidebars/Menus/superadminMenu")
+#extend("Layout/Partials/Sidebars/Menus/adminMenu")
+#extend("Layout/Partials/Sidebars/Menus/userMenu")

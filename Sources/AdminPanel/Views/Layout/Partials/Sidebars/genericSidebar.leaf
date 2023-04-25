@@ -1,0 +1,11 @@
+#extend("Layout/Partials/Sidebars/baseSidebar"):
+    #export("sidebarContent"):
+        #if(adminPanelConfig("role") == "admin"):
+            #extend("Layout/Partials/Sidebars/adminSidebar")
+        #elseif(adminPanelConfig("role") == "superAdmin"):
+            #extend("Layout/Partials/Sidebars/superAdminSidebar")
+        #elseif(adminPanelConfig("role") == "user"): 
+            #extend("Layout/Partials/Sidebars/userSidebar")
+        #endif
+    #endexport
+#endextend

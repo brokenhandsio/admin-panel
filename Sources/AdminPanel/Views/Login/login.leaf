@@ -1,0 +1,33 @@
+#extend("Layout/base"):
+    #export("styles"):
+        <link href="/AdminPanel/css/login.css" rel="stylesheet">
+    #endexport
+
+    #export("pageTitle"):
+        Login
+    #endexport
+
+    #export("body"):
+        <form class="form-signin" method="POST">
+            <h1>#(adminPanelConfig("name"))</h1>
+            <h4>Please sign in</h4>
+
+            #extend("Layout/Partials/alerts")
+
+            <div class="form-group">
+                <label for="email">Email address</label>
+                <input type="email" class="form-control" id="email" name="email" placeholder="Enter email" required autofocus>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="Enter password" required>
+            </div>
+            
+            <p><a href="/admin/users/reset-password/request">Forgot your password?</a></p>
+
+            <button class="btn btn-lg btn-primary btn-block" type="submit">Sign in</button>
+
+        </form>
+    #endexport
+#endextend

@@ -1,0 +1,19 @@
+<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0">
+    #extend("Layout/Partials/sitetitle")
+    #if(adminPanelUser()):
+    <div class="dropdown">
+        <button class="btn btn-dark btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+            <img src="#(adminPanelAvatarURL(user.email, user.avatarURL))" class="img-thumbnail" width="30">
+            #(adminPanelUser("name"))
+        </button>
+        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
+            <a class="dropdown-item" href="/admin/users/me/edit">
+                <span data-feather="edit"></span> Settings
+            </a>
+            <a class="dropdown-item" href="/admin/logout">
+                <span data-feather="log-out"></span> Sign out
+            </a>
+        </div>
+    </div>
+    #endif
+</nav>

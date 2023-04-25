@@ -1,23 +1,26 @@
-import Authentication
 import Leaf
-import Sugar
-import TemplateKit
 
-public final class CurrentUserTag<U: AdminPanelUserType>: TagRenderer {
-    public func render(tag: TagContext) throws -> Future<TemplateData> {
-        try tag.requireParameterCount(1)
-        let request = try tag.requireRequest()
-        let container = try request.privateContainer.make(CurrentUserContainer<U>.self)
-
+public struct CurrentUserTag: LeafTag {
+    public func render(_ ctx: LeafContext) throws -> LeafData {
+        guard let user = ctx.request?.auth.get(AdminPanelUser.self) else {
+            return .trueNil
+        }
+        
+        guard ctx.parameters.count > 0 else {
+            return user.leafData
+        }
+        
+        guard ctx.parameters.count == 1 else {
+            throw "Invalid parameter count: \(ctx.parameters.count)/1"
+        }
+        
         guard
-            let user = container.user,
-            let data = try user.convertToTemplateData().dictionary,
-            let key = tag.parameters[0].string,
+            let data = user.leafData.dictionary,
+            let key = ctx.parameters[0].string,
             let value = data[key]
         else {
-            throw tag.error(reason: "No user is logged in or the key doesn't exist.")
+            throw "The key doesn't exist."
         }
-
-        return tag.future(value)
+        return value
     }
 }

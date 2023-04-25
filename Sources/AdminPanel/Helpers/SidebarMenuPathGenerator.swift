@@ -1,7 +1,7 @@
-public typealias SidebarMenuPathGenerator<U: AdminPanelUserRoleType> = ((U?) -> String)
+public typealias SidebarMenuPathGenerator = ((AdminPanelUser.Role?) -> String)
 
-public extension AdminPanelUserRoleType {
-    static var sidebarMenuPathGenerator: SidebarMenuPathGenerator<Self> {
+public extension RoleType {
+    static var sidebarMenuPathGenerator: SidebarMenuPathGenerator {
         return { role in
             role?.menuPath ?? ""
         }

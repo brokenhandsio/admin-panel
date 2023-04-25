@@ -1,4 +1,39 @@
-# admin-panel
+# Admin Panel
+
+This package provides a simple admin panel for your [Vapor](https://vapor.codes) application.
+
+## 📦 Installation
+Add `AdminPanel` to your package dependencies (in your `Package.swift` file):
+
+```swift
+dependencies: [
+    // ...
+    .package(url: "https://github.com/brokenhandsio/admin-panel", from: "1.0.0-beta")
+]
+```
+
+as well as to your target:
+```swift
+.product(name: "AdminPanel", package: "admin-panel")
+```
+
+## 🚀 Getting started
+Import the package in your `configure.swift` file:
+
+```swift
+import AdminPanel
+```
+
+Then you can configure the admin panel:
+
+```swift
+app.adminPanel.config = .init(
+    name: "your-app",
+    baseURL: "http://127.0.0.1:8080",
+    environment: app.environment
+)
+```
+## Examples
 
 ![Login screen](https://user-images.githubusercontent.com/944158/63353860-b0fc1580-c363-11e9-881c-fec19874b4c0.png)
 
@@ -51,7 +86,7 @@ modalConfirmation.actions.dismiss = function(event) {
 
 Admin panel comes with a variety of leaf tags for generating certain HTML/js elements
 
-#### #adminPanel:avatarURL
+#### #adminPanelAvatarURL
 Use user image or fallback to [Adorable avatars](http://avatars.adorable.io/)
 
 |Parameter|Type|Description|
@@ -60,11 +95,11 @@ Use user image or fallback to [Adorable avatars](http://avatars.adorable.io/)
 |`url`|String|_image url_|
 
 Example usage
-```
-<img src="#adminPanel:avatarURL(user.email, user.avatarURL)" alt="Profile picture" class="img-thumbnail" width="40">
+```html
+<img src="#adminPanelAvatarURL(user.email, user.avatarURL)" alt="Profile picture" class="img-thumbnail" width="40">
 ```
 
-#### #adminPanel:config
+#### #adminPanelConfig
 Convenience method to output configuration strings such as app or environment name or paths to certain templates
 
 Supported input values and what they output
@@ -80,9 +115,9 @@ Supported input values and what they output
 |`configName`|String| _Config variable name_|
 
 Example usage
-```
-<!-- outputs app name ->
-#adminPanel:config("name")
+```html
+<!-- outputs app name -->
+#adminPanelConfig("name")
 ```
 
 #### #adminPanel:user
@@ -93,23 +128,9 @@ Outputs a field on the current user object as a string
 |`fieldName`|String| _User field name_|
 
 Example usage
-```
-<!-- outputs user's name ->
-#adminPanel:user("name")
-```
-
-#### #adminPanel:user:requireRole
-Make sure user has required role to output element. If not throws an error.
-
-|Parameter|Type|Description|
-|---------|----|-----------|
-|`roleName`|String| _User role_|
-
-Example usage
-```
-#adminPanel:user:requireRole("superAdmin") {
-    <div>I show if user is super admin</div>
-}
+```html
+<!-- outputs user's name -->
+#adminPanelUser("name")
 ```
 
 #### #adminPanel:user:hasRequiredRole
@@ -121,22 +142,30 @@ Check if user has a required role
 
 Example usage
 ```
-#if(adminPanel:user:hasRequiredRole("superAdmin")) {
+#if(adminPanelUserHasRequiredRole("superAdmin")):
     // Do something
-} else {
+#else:
     // Do something else
-}
+#endif
 ```
 
-#### #adminPanel:sidebar:heading
+#### #adminPanelSidebarHeading
 Renders a header, styled in a certain way, for the navigation sidebar.
 
 Example usage
 ```
-#adminPanel:sidebar:heading() { Super Admin }
+#adminPanelSidebarHeading: 
+    Super Admin
+#endadminPanelSidebarHeading
+```
+Renders
+```html
+<h6 class="sidebar-heading d-flex justify-content-between align-items-center px-3 mt-4 mb-1 text-muted">
+    <span>Super Admin</span>
+</h6>
 ```
 
-#### #adminPanel:sidebar:menuItem
+#### #adminPanelSidebarMenuItem
 Renders a sidebar menu item, styled in a certain way, for the navigation sidebar.
 
 |Parameter|Type|Description|
@@ -147,5 +176,16 @@ Renders a sidebar menu item, styled in a certain way, for the navigation sidebar
 
 Example usage
 ```
-#adminPanel:sidebar:menuItem("/admin/dashboard", "home", "/admin/dashboard*") { Home }
+#adminPanelSidebarMenuItem("/admin/dashboard", "home", "/admin/dashboard*"):
+    Home 
+#endadminPanelSidebarMenuItem
+```
+Renders
+```html
+<li class="nav-item">
+    <a class="nav-link" href="/admin/dashboard">
+        <span data-feather="home"></span>
+        Home
+    </a>
+</li>
 ```

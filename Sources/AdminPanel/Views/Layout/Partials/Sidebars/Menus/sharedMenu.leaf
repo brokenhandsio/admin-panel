@@ -1,0 +1,5 @@
+<ul class="nav flex-column">
+    #adminPanelSidebarMenuItem("/admin/dashboard", "home", "/admin/dashboard*"): 
+        Home
+    #endadminPanelSidebarMenuItem
+</ul>

@@ -1,0 +1,8 @@
+#adminPanelSidebarHeading(): 
+    Admin
+#endadminPanelSidebarHeading
+<ul class="nav flex-column mb-2">
+    #adminPanelSidebarMenuItem("/admin/users", "users", "/admin/users*"): 
+        Admin Panel Users
+    #endadminPanelSidebarMenuItem
+</ul>
