@@ -10,7 +10,7 @@
          <div class="container-fluid">
             <div class="row">
                 #extend("Layout/Partials/Sidebars/genericSidebar")
-                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <main role="main" class="col-md-9 ms-sm-auto col-lg-10 px-4">
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                     <h2 class="h2">
                         #if(user): 
@@ -22,7 +22,7 @@
                         <div class="btn-toolbar mb-2 mb-md-0">
                             <nav aria-label="breadcrumb">
                                 <ol class="breadcrumb">
-                                    <li class="breadcrumb-item"><a href="/admin/users">Admin Panel Users</a></li>
+                                    <li class="breadcrumb-item"><a href="/admin/users" class="text-decoration-none">Admin Panel Users</a></li>
                                     <li class="breadcrumb-item active" aria-current="page">
                                         #if(user): 
                                             Edit
@@ -37,22 +37,22 @@
                     <form method="post" #if(user == nil): action="/admin/users/create" #endif>
                         <h4>User details</h4>
 
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label class="form-label" for="name">Name</label>
                             #bsInput("text", "", "id='name' name='name' placeholder='Enter name'")
                         </div>
 
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label class="form-label" for="name">Title</label>
                             #bsInput("text", "", "id='title' name='title' placeholder='Enter title'")
                         </div>
 
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label class="form-label" for="name">Email</label>
                             #bsInput("email", "", "id='email' name='email' placeholder='Enter email'")
                         </div>
 
-                        <div class="form-group">
+                        <div class="mb-3">
                             <label for="role">Role</label>
                             <select class="form-control" name="role" id="role">
                                 <option value="superAdmin" #if(adminPanelUser("role") == "superAdmin"): selected #endif>Super Admin</option>
@@ -68,37 +68,37 @@
                             <p>If you don't specify a password, then the user will receive an email with instructions on how to set one. If you specify a password, then no email will be sent to the new user.</p>
 
                             <!-- The 'form-check-input' extra class can be removed once we upgrade to BS 5 -->
-                            <div class="form-group form-check">
+                            <div class="mb-3 form-check">
                                 #bsCheckbox("form-check-input", "id='shouldSpecifyPassword' placeholder='Specify password'")
                                 <label class="form-check-label" for="shouldSpecifyPassword">Specify password</label>
                                 <small id="shouldSpecifyPasswordHelp" class="form-text text-muted">Leave this out and the user will have to specify one themselves.</small>
                             </div>
 
                             <div id="specifyPassword" style="display:none;">
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label class="form-label" for="password">Password</label>
                                     #bsInput("password", "", "id='password' name='password' placeholder='Enter password' required")
                                     <small id="passwordHelp" class="form-text text-muted">Minimum 8 characters and needs to satisfy three of the following: has a lowercase character, has an uppercase character, has a digit or has a special character.</small>
                                 </div>
 
-                                <div class="form-group">
+                                <div class="mb-3">
                                     <label class="form-label" for="passwordAgain">Password again</label>
                                     #bsInput("password", "", "id='passwordAgain' name='passwordAgain' placeholder='Enter password again' required")
                                 </div>
                             </div>
 
-                            <div class="form-group form-check">
+                            <div class="mb-3 form-check">
                                 #bsCheckbox("form-check-input", "", "id='shouldResetPassword' placeholder='Should reset password'")
                                 <label class="form-check-label" for="shouldResetPassword">Should reset password</label>
                                 <small id="shouldResetPasswordHelp" class="form-text text-muted">This will require the user to set a new password after logging in the first time.</small>
                             </div>
                         #else:
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label class="form-label" for="password">Password</label>
                                 #bsInput("password", "", "id='password' name='password' placeholder='Enter password' required")
                                 <small id="passwordHelp" class="form-text text-muted">Minimum 8 characters.</small>
                             </div>
-                            <div class="form-group">
+                            <div class="mb-3">
                                 <label class="form-label" for="passwordAgain">Password again</label>
                                 #bsInput("password", "", "id='passwordAgain' name='passwordAgain' placeholder='Enter password again' required")
                             </div>

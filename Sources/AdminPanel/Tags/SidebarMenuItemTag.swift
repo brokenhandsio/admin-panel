@@ -8,7 +8,6 @@ public struct SidebarMenuItemTag: UnsafeUnescapedLeafTag {
         icon = "<span data-feather='\(icon ?? "")'></span>"
         
         var activeLink = ""
-        var activeTitle = ""
         
         if ctx.parameters.count > 2 {
             let currentPath = ctx.request?.url.path ?? ""
@@ -16,7 +15,6 @@ public struct SidebarMenuItemTag: UnsafeUnescapedLeafTag {
             
             if isActive(currentPath: currentPath, pathPatterns: activeURLPatterns) {
                 activeLink = " active"
-                activeTitle = " <span class='sr-only'>(current)</span>"
             }
         }
         
@@ -27,7 +25,7 @@ public struct SidebarMenuItemTag: UnsafeUnescapedLeafTag {
         <li class="nav-item">
             <a class="nav-link\(activeLink)" href="\(url)">
                 \(icon ?? "")
-                \(body)\(activeTitle)
+                \(body)
             </a>
         </li>
         """

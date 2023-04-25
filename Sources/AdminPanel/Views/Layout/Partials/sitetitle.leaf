@@ -1,6 +1,6 @@
-<a class="navbar-brand col-sm-3 col-md-2 mr-0" href="/admin">
-    #adminPanelConfig("name")
+<a class="navbar-brand col-sm-3 col-md-2 me-0" href="/admin">
+    <span class="ms-3">#adminPanelConfig("name")</span>
     #if(adminPanelConfig("environment") != "production"):
-        <span class="badge badge-primary">#(adminPanelConfig("environment"))</span>
+        <span class="badge text-bg-primary p-1">#(adminPanelConfig("environment"))</span>
     #endif
 </a>

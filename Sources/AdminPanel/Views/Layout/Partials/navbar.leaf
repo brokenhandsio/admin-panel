@@ -1,19 +1,23 @@
-<nav class="navbar navbar-dark fixed-top bg-dark flex-md-nowrap p-0">
-    #extend("Layout/Partials/sitetitle")
-    #if(adminPanelUser()):
-    <div class="dropdown">
-        <button class="btn btn-dark btn-block dropdown-toggle" type="button" id="dropdownMenuButton" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
-            <img src="#(adminPanelAvatarURL(user.email, user.avatarURL))" class="img-thumbnail" width="30">
-            #(adminPanelUser("name"))
-        </button>
-        <div class="dropdown-menu dropdown-menu-right" aria-labelledby="dropdownMenuButton">
-            <a class="dropdown-item" href="/admin/users/me/edit">
-                <span data-feather="edit"></span> Settings
-            </a>
-            <a class="dropdown-item" href="/admin/logout">
-                <span data-feather="log-out"></span> Sign out
-            </a>
-        </div>
+<nav class="navbar navbar-dark navbar-expand-lg fixed-top bg-dark p-0">
+    <div class="container-fluid ps-0">
+        #extend("Layout/Partials/sitetitle")
+        <ul class="navbar-nav">
+            #if(adminPanelUser()):
+                <li class="ms-auto nav-item dropdown dropdown-start">
+                    <a href="#" class="nav-link dropdown-toggle" role="button" id="dropdownMenuButton" data-bs-toggle="dropdown" style="outline:none">
+                        <img src="#(adminPanelAvatarURL(adminPanelUser("email"), adminPanelUser("avatarURL")))" alt="Profile picture" class="img-thumbnail" width="30">
+                        #(adminPanelUser("name"))
+                    </a>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="dropdownMenuButton" style="outline:none;">
+                        <li><a class="dropdown-item" href="/admin/users/me/edit">
+                            <span data-feather="edit"></span> Settings
+                        </a></li>
+                        <li><a class="dropdown-item" href="/admin/logout">
+                            <span data-feather="log-out"></span> Sign out
+                        </a></li>
+                    </ul>
+                </li>
+            #endif
+        </ul>
     </div>
-    #endif
 </nav>
