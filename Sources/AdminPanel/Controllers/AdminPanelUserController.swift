@@ -58,7 +58,7 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
         )
                 
         if userCreate.shouldSpecifyPassword == false {
-            _ = try await req.adminPanel.requestPasswordReset(
+            try await req.adminPanel.requestPasswordReset(
                 for: user,
                 url: url,
                 token: resetToken,

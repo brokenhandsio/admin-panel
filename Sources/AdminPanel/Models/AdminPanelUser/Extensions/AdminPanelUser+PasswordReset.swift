@@ -18,6 +18,7 @@ extension AdminPanelUser {
 }
 
 extension Request.AdminPanel {
+    @discardableResult
     public func requestPasswordReset(
         for user: AdminPanelUser,
         url: String,

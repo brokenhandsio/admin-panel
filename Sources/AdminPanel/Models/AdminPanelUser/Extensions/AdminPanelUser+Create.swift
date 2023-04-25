@@ -16,7 +16,7 @@ extension AdminPanelUser {
         if create.shouldSpecifyPassword == true {
             password = create.password
         } else {
-            password = String.randomAlphaNumericString(12)
+            password = String.randomSecurePassword()
         }
 
         try self.init(
@@ -31,17 +31,33 @@ extension AdminPanelUser {
 }
 
 extension String {
-    static func randomAlphaNumericString(_ length: Int) -> String {
-        let allowedChars = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789"
-        let allowedCharsCount = UInt32(allowedChars.count)
-        var randomString = ""
-
-        for _ in 0..<length {
-            let randomNum = Int(arc4random_uniform(allowedCharsCount))
-            let newCharacter = allowedChars[allowedChars.index(allowedChars.startIndex, offsetBy: randomNum)]
-            randomString += String(newCharacter)
-        }
-
-        return randomString
+    static func randomSecurePassword() -> String {
+        let length = Int.random(in: 8...20)
+        let uppercaseLetters = "ABCDEFGHIJKLMNOPQRSTUVWXYZ"
+        let lowercaseLetters = "abcdefghijklmnopqrstuvwxyz"
+        let digits = "0123456789"
+        let specials = "!@#$%^&*()_+-="
+        var requiredChars = [Character]()
+        var remainingLength = length
+        
+        // Ensure at least 1 uppercase letter
+        requiredChars.append(uppercaseLetters.randomElement()!)
+        remainingLength -= 1
+        
+        // Ensure at least 1 lowercase letter
+        requiredChars.append(lowercaseLetters.randomElement()!)
+        remainingLength -= 1
+        
+        // Ensure at least 1 digit or special character
+        let digitOrSpecial = (Bool.random() ? digits : specials)
+        requiredChars.append(digitOrSpecial.randomElement()!)
+        remainingLength -= 1
+        
+        // Fill remaining characters with any of the above
+        let allChars = uppercaseLetters + lowercaseLetters + digits + specials
+        let remainingChars = (0..<remainingLength).map { _ in allChars.randomElement()! }
+        
+        let password = (requiredChars + remainingChars).shuffled()
+        return String(password)
     }
 }

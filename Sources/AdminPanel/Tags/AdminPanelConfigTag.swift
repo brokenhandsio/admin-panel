@@ -24,7 +24,6 @@ public struct AdminPanelConfigTag: LeafTag {
 public struct AdminPanelConfigTagData {
     enum Keys: String {
         case name
-        case role
         case baseURL
         case sidebarMenuPath
         case dashboardPath
@@ -63,8 +62,6 @@ public struct AdminPanelConfigTagData {
         switch parsedKey {
         case .name:
             return .string(name)
-        case .role:
-            return .string(user?.role?.rawValue ?? "")
         case .baseURL:
             return .string(baseURL)
         case .sidebarMenuPath:
