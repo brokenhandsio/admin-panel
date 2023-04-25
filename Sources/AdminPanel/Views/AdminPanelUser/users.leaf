@@ -7,13 +7,13 @@
         <div class="container-fluid">
             <div class="row">
                 #extend("Layout/Partials/Sidebars/genericSidebar")
-                <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-4">
+                <main role="main" class="col-md-9 ms-sm-auto col-lg-10 px-4">
                     #extend("Layout/Partials/alerts")
                     <div class="d-flex justify-content-between flex-wrap flex-md-nowrap align-items-center pt-3 pb-2 mb-3 border-bottom">
                         <h1 class="h2">Dashboard</h1>
                         #extend("Layout/Partials/breadcrumb")
                     </div>
-                    <div class="btn-group mr-2 mb-3 float-right">
+                    <div class="btn-group me-2 mb-3 float-end">
                         <a href="/admin/users/create" class="btn btn-primary">
                             <span data-feather="plus"></span>
                             Add user
@@ -36,12 +36,12 @@
                                     <td>#(user.name)</td>
                                     <td>#(user.title)</td>
                                     <td>#(user.email)</td>
-                                    <td class="float-right">
-                                        <div class="btn-group float-right">
-                                            <a href="/admin/users/#(user.id)/edit" class="btn btn-sm btn-secondary" data-toggle="tooltip" data-placement="top" title="Edit user">
+                                    <td>
+                                        <div class="btn-group float-end">
+                                            <a href="/admin/users/#(user.id)/edit" class="btn btn-secondary" data-toggle="tooltip" data-placement="top" title="Edit user">
                                                 <span data-feather="edit"></span>
                                             </a>
-                                            <a href="/admin/users/#(user.id)/delete" class="btn btn-sm btn-danger" data-toggle="tooltip" data-placement="top" title="Delete user" data-confirm="true" data-header="Delete user?" data-text="Are you sure you want to delete '#(user.name)'?" data-button="danger">
+                                            <a href="/admin/users/#(user.id)/delete" class="btn btn-danger" data-toggle="tooltip" data-placement="top" title="Delete user" data-confirm="true" data-header="Delete user?" data-text="Are you sure you want to delete '#(user.name)'?" data-button="danger">
                                                 <span data-feather="delete"></span>
                                             </a>
                                         </div>
