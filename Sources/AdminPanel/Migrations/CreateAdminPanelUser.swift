@@ -4,6 +4,8 @@ import FluentSQL
 
 public extension AdminPanelUser {
     public struct CreateMigration: AsyncMigration {
+        public init() {}
+
         public func prepare(on database: Database) async throws {
             var roleTypeEnumBuilder = database.enum(AdminPanelUser.Role.schema)
             for role in AdminPanelUser.Role.allCases {
