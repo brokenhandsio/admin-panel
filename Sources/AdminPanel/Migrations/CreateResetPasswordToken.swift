@@ -2,6 +2,8 @@ import Fluent
 
 public extension ResetPasswordToken {
     public struct CreateMigration: AsyncMigration {
+        public init() {}
+        
         public func prepare(on database: Database) async throws {
             try await database.schema(ResetPasswordToken.schema)
                 .field("id", .int, .identifier(auto: true))
