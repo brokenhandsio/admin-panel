@@ -8,7 +8,7 @@ extension Request {
     public struct AdminPanel {
         let request: Request
         
-        var config: AdminPanelConfig {
+        public var config: AdminPanelConfig {
             request.application.adminPanel.config
         }
     }
