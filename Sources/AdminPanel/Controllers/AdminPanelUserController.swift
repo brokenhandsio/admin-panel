@@ -3,12 +3,12 @@ import Leaf
 import Vapor
 
 public protocol AdminPanelUserControllerType: RouteCollection {
-    func listHandler(_ req: Request) async throws -> View
-    func createHandler(_ req: Request) async throws -> View
+    func listHandler(_ req: Request) async throws -> Response
+    func createHandler(_ req: Request) async throws -> Response
     func createPostHandler(_ req: Request) async throws -> Response
-    func editMeHandler(_ req: Request) async throws -> View
+    func editMeHandler(_ req: Request) async throws -> Response
     func editMePostHandler(_ req: Request) async throws -> Response
-    func editUserHandler(_ req: Request) async throws -> View
+    func editUserHandler(_ req: Request) async throws -> Response
     func editUserPostHandler(_ req: Request) async throws -> Response
     func deletePostHandler(_ req: Request) async throws -> Response
 }
@@ -28,20 +28,21 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
     
     // MARK: List
     
-    public func listHandler(_ req: Request) async throws -> View {
+    public func listHandler(_ req: Request) async throws -> Response {
         // TODO: Paginate users
         let users = try await AdminPanelUser.query(on: req.db).all()
         
         return try await req.leaf.render(
             req.adminPanel.config.views.adminPanelUser.index,
             ["users": users]
-        )
+        ).encodeResponse(for: req)
     }
     
     // MARK: Create user routes
     
-    public func createHandler(_ req: Request) async throws -> View {
+    public func createHandler(_ req: Request) async throws -> Response {
         try await req.leaf.render(req.adminPanel.config.views.adminPanelUser.editAndCreate)
+            .encodeResponse(for: req)
     }
     
     public func createPostHandler(_ req: Request) async throws -> Response {
@@ -76,11 +77,11 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
 
     // MARK: Edit user routes
     
-    public func editMeHandler(_ req: Request) async throws -> View {
+    public func editMeHandler(_ req: Request) async throws -> Response {
         try await editHandler(req, user: try req.auth.require(AdminPanelUser.self))
     }
     
-    public func editUserHandler(_ req: Request) async throws -> View {
+    public func editUserHandler(_ req: Request) async throws -> Response {
         let userId = try req.parameters.require("userId")
         guard
             let user = try await AdminPanelUser.find(req.parameters.get("userId"), on: req.db)
@@ -130,7 +131,7 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
     
     // MARK: Private methods
     
-    private func editHandler(_ req: Request, user: AdminPanelUser) async throws -> View {
+    private func editHandler(_ req: Request, user: AdminPanelUser) async throws -> Response {
         let adminPanelUser = try req.auth.require(AdminPanelUser.self)
         
         // A user may not edit a user of a higher role
@@ -144,7 +145,7 @@ public final class AdminPanelUserController: AdminPanelUserControllerType {
         return try await req.leaf.render(
             req.adminPanel.config.views.adminPanelUser.editAndCreate,
             ["user": user]
-        )
+        ).encodeResponse(for: req)
     }
     
     private func editPostHandler(_ req: Request, user: AdminPanelUser) async throws -> Response {
